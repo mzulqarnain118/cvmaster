@@ -14,6 +14,9 @@ import { VolunteerDialog } from "../pages/builder/sidebars/left/dialogs/voluntee
 import { ImportDialog } from "../pages/dashboard/resumes/_dialogs/import";
 import { LockDialog } from "../pages/dashboard/resumes/_dialogs/lock";
 import { ResumeDialog } from "../pages/dashboard/resumes/_dialogs/resume";
+import { ImportCLDialog } from "../pages/dashboard/coverLetters/_dialogs/import";
+import { LockCLDialog } from "../pages/dashboard/coverLetters/_dialogs/lock";
+import { CoverLetterDialog } from "../pages/dashboard/coverLetters/_dialogs/coverLetter";
 import { TwoFactorDialog } from "../pages/dashboard/settings/_dialogs/two-factor";
 import { useResumeStore } from "../stores/resume";
 
@@ -32,6 +35,9 @@ export const DialogProvider = ({ children }: Props) => {
         <ResumeDialog />
         <LockDialog />
         <ImportDialog />
+        <CoverLetterDialog />
+        <LockCLDialog />
+        <ImportCLDialog />
         <TwoFactorDialog />
 
         {isResumeLoaded && (

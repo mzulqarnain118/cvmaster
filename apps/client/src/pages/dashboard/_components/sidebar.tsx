@@ -75,6 +75,11 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
     setOpen?.(false);
   });
 
+  useKeyboardShortcut(["shift", "c"], () => {
+    navigate("/dashboard/cover-letters");
+    setOpen?.(false);
+  });
+
   useKeyboardShortcut(["shift", "s"], () => {
     navigate("/dashboard/settings");
     setOpen?.(false);
@@ -85,6 +90,12 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
       path: "/dashboard/resumes",
       name: t`Resumes`,
       shortcut: "⇧R",
+      icon: <ReadCvLogo />,
+    },
+    {
+      path: "/dashboard/cover-letters",
+      name: `Cover Letters`,
+      shortcut: "⇧C",
       icon: <ReadCvLogo />,
     },
     {

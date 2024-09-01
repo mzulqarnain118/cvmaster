@@ -46,8 +46,8 @@ const formSchema = createResumeSchema.extend({ id: idSchema.optional() });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export const ResumeDialog = () => {
-  const { isOpen, mode, payload, close } = useDialog<ResumeDto>("resume");
+export const CoverLetterDialog = () => {
+  const { isOpen, mode, payload, close } = useDialog<ResumeDto>("coverLetter");
 
   const isCreate = mode === "create";
   const isUpdate = mode === "update";
@@ -81,7 +81,7 @@ export const ResumeDialog = () => {
         slug: values.slug,
         title: values.title,
         visibility: "private",
-        type: "resume",
+        type: "coverLetter",
       });
     }
 
@@ -102,7 +102,7 @@ export const ResumeDialog = () => {
         title: values.title,
         slug: values.slug,
         data: payload.item.data,
-        type: "resume",
+        type: "coverLetter",
       });
     }
 
@@ -138,7 +138,7 @@ export const ResumeDialog = () => {
       title: randomName,
       slug: kebabCase(randomName),
       data: sampleResume,
-      type: "resume",
+      type: "coverLetter",
     });
 
     close();
@@ -151,9 +151,9 @@ export const ResumeDialog = () => {
           <Form {...form}>
             <form>
               <AlertDialogHeader>
-                <AlertDialogTitle>{t`Are you sure you want to delete your resume?`}</AlertDialogTitle>
+                <AlertDialogTitle>{`Are you sure you want to delete your cover letter?`}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {t`This action cannot be undone. This will permanently delete your resume and cannot be recovered.`}
+                  {`This action cannot be undone. This will permanently delete your cover letter and cannot be recovered.`}
                 </AlertDialogDescription>
               </AlertDialogHeader>
 
@@ -180,16 +180,16 @@ export const ResumeDialog = () => {
                 <div className="flex items-center space-x-2.5">
                   <Plus />
                   <h2>
-                    {isCreate && t`Create a new resume`}
-                    {isUpdate && t`Update an existing resume`}
-                    {isDuplicate && t`Duplicate an existing resume`}
+                    {isCreate && `Create a new cover letter`}
+                    {isUpdate && `Update an existing cover letter`}
+                    {isDuplicate && `Duplicate an existing cover letter`}
                   </h2>
                 </div>
               </DialogTitle>
               <DialogDescription>
-                {isCreate && t`Start building your resume by giving it a name.`}
+                {isCreate && `Start building your cover letter by giving it a name.`}
                 {isUpdate && t`Changed your mind about the name? Give it a new one.`}
-                {isDuplicate && t`Give your old resume a new name.`}
+                {isDuplicate && `Give your old cover letter a new name.`}
               </DialogDescription>
             </DialogHeader>
 
@@ -204,7 +204,7 @@ export const ResumeDialog = () => {
                       <Input {...field} className="flex-1" />
 
                       {(isCreate || isDuplicate) && (
-                        <Tooltip content={t`Generate a random title for your resume`}>
+                        <Tooltip content={`Generate a random title for your cover letter`}>
                           <Button
                             size="icon"
                             type="button"
@@ -218,7 +218,7 @@ export const ResumeDialog = () => {
                     </div>
                   </FormControl>
                   <FormDescription>
-                    {t`Tip: You can name the resume referring to the position you are applying for.`}
+                    {`Tip: You can name the cover letter referring to the position you are applying for.`}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -261,7 +261,7 @@ export const ResumeDialog = () => {
                     <DropdownMenuContent side="right" align="center">
                       <DropdownMenuItem onClick={onCreateSample}>
                         <Flask className="mr-2" />
-                        {t`Create Sample Resume`}
+                        {`Create Sample cover letter`}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

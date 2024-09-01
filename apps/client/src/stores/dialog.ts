@@ -4,7 +4,7 @@ import { create } from "zustand";
 
 
 // Update DialogName to include coverLetter
-export type DialogName = "resume" | "coverLetter" | "lock" | "import" | "two-factor" | SectionKey;
+export type DialogName = "resume" | "coverLetter" | "importCL" | "lockCL" | "lock" | "import" | "two-factor" | SectionKey;
 
 
 export type DialogMode = "create" | "update" | "duplicate" | "delete";

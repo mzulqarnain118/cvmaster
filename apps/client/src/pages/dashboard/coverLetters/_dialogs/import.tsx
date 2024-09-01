@@ -69,9 +69,9 @@ type ValidationResult =
       result: ResumeData | ReactiveResumeV3 | LinkedIn | JsonResume;
     };
 
-export const ImportDialog = () => {
+export const ImportCLDialog = () => {
   const { toast } = useToast();
-  const { isOpen, close } = useDialog("import");
+  const { isOpen, close } = useDialog("importCL");
   const { importResume, loading } = useImportResume();
 
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null);
@@ -159,28 +159,28 @@ export const ImportDialog = () => {
         const parser = new ReactiveResumeParser();
         const data = parser.convert(validationResult.result as ResumeData);
 
-        await importResume({ data, type: "resume" });
+        await importResume({ data, type: "coverLetter" });
       }
 
       if (type === ImportType["reactive-resume-v3-json"]) {
         const parser = new ReactiveResumeV3Parser();
         const data = parser.convert(validationResult.result as ReactiveResumeV3);
 
-        await importResume({ data, type: "resume" });
+        await importResume({ data, type: "coverLetter" });
       }
 
       if (type === ImportType["json-resume-json"]) {
         const parser = new JsonResumeParser();
         const data = parser.convert(validationResult.result as JsonResume);
 
-        await importResume({ data, type: "resume" });
+        await importResume({ data, type: "coverLetter" });
       }
 
       if (type === ImportType["linkedin-data-export-zip"]) {
         const parser = new LinkedInParser();
         const data = parser.convert(validationResult.result as LinkedIn);
 
-        await importResume({ data, type: "resume" });
+        await importResume({ data, type: "coverLetter" });
       }
 
       close();
@@ -207,7 +207,7 @@ export const ImportDialog = () => {
               <DialogTitle>
                 <div className="flex items-center space-x-2.5">
                   <DownloadSimple />
-                  <h2>{t`Import an existing resume`}</h2>
+                  <h2>Import an existing Cover letter</h2>
                 </div>
               </DialogTitle>
               <DialogDescription>
@@ -234,7 +234,7 @@ export const ImportDialog = () => {
                           CV Master v3 (.json)
                         </SelectItem>
                         {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
-                        <SelectItem value="json-resume-json">JSON Resume (.json)</SelectItem>
+                        <SelectItem value="json-resume-json">JSON Cover Letter (.json)</SelectItem>
                         {/* eslint-disable-next-line lingui/no-unlocalized-strings */}
                         <SelectItem value="linkedin-data-export-zip">
                           LinkedIn Data Export (.zip)

@@ -40,6 +40,7 @@ export class ResumeService {
         userId,
         title: createResumeDto.title,
         visibility: createResumeDto.visibility,
+        type: createResumeDto.type,
         slug: createResumeDto.slug ?? kebabCase(createResumeDto.title),
       },
     });
@@ -52,6 +53,7 @@ export class ResumeService {
       data: {
         userId,
         visibility: "private",
+        type: importResumeDto.type,
         data: importResumeDto.data,
         title: importResumeDto.title ?? randomTitle,
         slug: importResumeDto.slug ?? kebabCase(randomTitle),

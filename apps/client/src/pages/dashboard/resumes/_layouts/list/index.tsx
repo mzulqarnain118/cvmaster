@@ -11,6 +11,8 @@ import { ResumeListItem } from "./_components/resume-item";
 export const ListView = () => {
   const { resumes, loading } = useResumes();
 
+  const data = loading ? [] : resumes?.filter((item) => item.type === "resume");
+
   return (
     <div className="grid gap-y-2">
       <motion.div initial={{ opacity: 0, y: -50 }} animate={{ opacity: 1, y: 0 }}>
@@ -35,9 +37,9 @@ export const ListView = () => {
           </div>
         ))}
 
-      {resumes && (
+      {data && (
         <AnimatePresence>
-          {resumes
+          {data
             .sort((a, b) => sortByDate(a, b, "updatedAt"))
             .map((resume, index) => (
               <motion.div

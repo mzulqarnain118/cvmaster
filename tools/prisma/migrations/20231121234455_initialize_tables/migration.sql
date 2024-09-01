@@ -4,6 +4,9 @@ CREATE TYPE "Provider" AS ENUM ('email', 'github', 'google');
 -- CreateEnum
 CREATE TYPE "Visibility" AS ENUM ('public', 'private');
 
+-- CreateEnum
+CREATE TYPE "Type" AS ENUM ('resume', 'coverLetter');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -43,6 +46,7 @@ CREATE TABLE "Resume" (
     "slug" TEXT NOT NULL,
     "data" JSONB NOT NULL DEFAULT '{}',
     "visibility" "Visibility" NOT NULL DEFAULT 'private',
+    "type" "Type" NOT NULL DEFAULT 'resume',
     "locked" BOOLEAN NOT NULL DEFAULT false,
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

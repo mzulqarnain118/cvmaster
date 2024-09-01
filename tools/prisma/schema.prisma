@@ -18,6 +18,11 @@ enum Visibility {
   private
 }
 
+enum Type {
+  resume
+  coverLetter
+}
+
 model User {
   id               String   @id @default(cuid())
   name             String
@@ -55,6 +60,7 @@ model Resume {
   slug       String
   data       Json        @default("{}")
   visibility Visibility  @default(private)
+  type       Type        @default(resume)
   locked     Boolean     @default(false)
   statistics Statistics?
   userId     String

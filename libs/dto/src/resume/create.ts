@@ -6,6 +6,7 @@ export const createResumeSchema = z.object({
   title: z.string().min(1),
   slug: z.string().min(1).transform(kebabCase).optional(),
   visibility: z.enum(["public", "private"]).default("private"),
+  type: z.enum(["resume", "coverLetter"]).default("resume"),
 });
 
 export class CreateResumeDto extends createZodDto(createResumeSchema) {}
