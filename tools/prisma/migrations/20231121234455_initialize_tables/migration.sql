@@ -17,6 +17,8 @@ CREATE TABLE "User" (
     "locale" TEXT NOT NULL DEFAULT 'en-US',
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "twoFactorEnabled" BOOLEAN NOT NULL DEFAULT false,
+    "subscriptionId" TEXT,
+    "paymentUserId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "provider" "Provider" NOT NULL,

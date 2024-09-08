@@ -32,6 +32,8 @@ model User {
   locale           String   @default("en-US")
   emailVerified    Boolean  @default(false)
   twoFactorEnabled Boolean  @default(false)
+  subscriptionId   String?  @default("")
+  paymentUserId    String?  @default("")
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   provider         Provider

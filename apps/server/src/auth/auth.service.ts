@@ -19,6 +19,7 @@ import { Config } from "../config/schema";
 import { MailService } from "../mail/mail.service";
 import { UserService } from "../user/user.service";
 import { Payload } from "./utils/payload";
+import { SubscriptionService } from "../subscription/subscription.service";
 
 @Injectable()
 export class AuthService {
@@ -27,6 +28,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly mailService: MailService,
     private readonly jwtService: JwtService,
+    private readonly subscriptionService: SubscriptionService,
   ) {}
 
   private hash(password: string): Promise<string> {
@@ -112,10 +114,19 @@ export class AuthService {
         secrets: { create: { password: hashedPassword } },
       });
 
+      // create payment user
+      const paymentUser = await this.subscriptionService.createPaymentUser(
+        registerDto.email,
+        registerDto.name,
+      );
+
+      await this.userService.updateByEmail(registerDto.email, { paymentUserId: paymentUser.id });
+      user.paymentUserId = paymentUser.id;
+
       // Do not `await` this function, otherwise the user will have to wait for the email to be sent before the response is returned
       void this.sendVerificationEmail(user.email);
 
-      return user as UserWithSecrets;
+      return { ...user, isCardAttached: false } as UserWithSecrets;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
         throw new BadRequestException(ErrorMessage.UserAlreadyExists);

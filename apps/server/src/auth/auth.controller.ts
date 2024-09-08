@@ -39,6 +39,8 @@ import { RefreshGuard } from "./guards/refresh.guard";
 import { TwoFactorGuard } from "./guards/two-factor.guard";
 import { getCookieOptions } from "./utils/cookie";
 import { payloadSchema } from "./utils/payload";
+import { SubscriptionService } from "../subscription/subscription.service";
+import { UserService } from "../user/user.service";
 
 @ApiTags("Authentication")
 @Controller("auth")
@@ -46,6 +48,8 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly subscriptionService: SubscriptionService,
+    private readonly userService: UserService,
   ) {}
 
   private async exchangeToken(id: string, email: string, isTwoFactorAuth = false) {
@@ -104,6 +108,20 @@ export class AuthController {
   @Post("login")
   @UseGuards(LocalGuard)
   async login(@User() user: UserWithSecrets, @Res({ passthrough: true }) response: Response) {
+    const paymentUser = user.paymentUserId
+      ? await this.subscriptionService.getPaymentUser(user.paymentUserId)
+      : await this.subscriptionService.createPaymentUser(user.email, user.name);
+
+    if (!user.paymentUserId) {
+      await this.userService.updateByEmail(user.email, { paymentUserId: paymentUser.id });
+      user.paymentUserId = paymentUser.id;
+    }
+
+    user.isCardAttached =
+      paymentUser?.invoice_settings?.default_payment_method || paymentUser?.default_source
+        ? true
+        : false;
+
     return this.handleAuthenticationResponse(user, response);
   }
 

@@ -30,5 +30,5 @@ export const useUser = () => {
     setUser(user ?? null);
   }, [user, setUser]);
 
-  return { user: user, loading, error };
+  return { user, loading, error };
 };

@@ -13,6 +13,7 @@ import { SkillsDialog } from "../pages/builder/sidebars/left/dialogs/skills";
 import { VolunteerDialog } from "../pages/builder/sidebars/left/dialogs/volunteer";
 import { ImportDialog } from "../pages/dashboard/resumes/_dialogs/import";
 import { LockDialog } from "../pages/dashboard/resumes/_dialogs/lock";
+import { SubscribeDialog } from "../components/subscriptions/_dialogs/subscribe";
 import { ResumeDialog } from "../pages/dashboard/resumes/_dialogs/resume";
 import { ImportCLDialog } from "../pages/dashboard/coverLetters/_dialogs/import";
 import { LockCLDialog } from "../pages/dashboard/coverLetters/_dialogs/lock";
@@ -39,6 +40,7 @@ export const DialogProvider = ({ children }: Props) => {
         <LockCLDialog />
         <ImportCLDialog />
         <TwoFactorDialog />
+        <SubscribeDialog />
 
         {isResumeLoaded && (
           <>

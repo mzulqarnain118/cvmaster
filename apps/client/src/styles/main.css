@@ -6,3 +6,8 @@
 * {
   @apply border-border/50;
 }
+
+.StripeElement {
+  background-color: white;
+  padding: 15px 5px;
+}

@@ -19,6 +19,8 @@ import { useToast } from "@/client/hooks/use-toast";
 import { usePrintResume } from "@/client/services/resume";
 import { useBuilderStore } from "@/client/stores/builder";
 import { useResumeStore, useTemporalResumeStore } from "@/client/stores/resume";
+import { useDialog } from "@/client/stores/dialog";
+import { useUser } from "@/client/services/user";
 
 const openInNewTab = (url: string) => {
   const win = window.open(url, "_blank");
@@ -26,6 +28,8 @@ const openInNewTab = (url: string) => {
 };
 
 export const BuilderToolbar = () => {
+  const { user } = useUser();
+  const { open } = useDialog("subscription");
   const { toast } = useToast();
   const setValue = useResumeStore((state) => state.setValue);
   const undo = useTemporalResumeStore((state) => state.undo);
@@ -39,9 +43,12 @@ export const BuilderToolbar = () => {
   const { printResume, loading } = usePrintResume();
 
   const onPrint = async () => {
-    const { url } = await printResume({ id });
-
-    openInNewTab(url);
+    if (user?.subscriptionId) {
+      const { url } = await printResume({ id });
+      openInNewTab(url);
+    } else {
+      open("create");
+    }
   };
 
   const onCopy = async () => {

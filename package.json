@@ -1,10 +1,7 @@
 {
-
   "description": " CV Master that simplifies the process of creating, updating, and sharing your resume.",
   "version": "4.1.8",
-
   "private": true,
-
   "scripts": {
     "dev": "nx run-many -t serve",
     "test": "pnpm vitest run",
@@ -114,6 +111,7 @@
     "@dnd-kit/sortable": "^8.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@fontsource/ibm-plex-sans": "^5.0.20",
+    "@golevelup/nestjs-stripe": "^0.8.2",
     "@hookform/resolvers": "^3.6.0",
     "@lingui/core": "^4.11.1",
     "@lingui/detect-locale": "^4.11.1",
@@ -157,6 +155,8 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@stripe/react-stripe-js": "^2.8.0",
+    "@stripe/stripe-js": "^4.4.0",
     "@swc/helpers": "~0.5.11",
     "@tanstack/react-query": "^5.40.1",
     "@tiptap/extension-bold": "^2.4.0",
@@ -231,6 +231,7 @@
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "sharp": "^0.33.4",
+    "stripe": "^16.10.0",
     "tailwind-merge": "^2.3.0",
     "tslib": "^2.6.3",
     "unique-names-generator": "^4.7.1",

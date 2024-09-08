@@ -23,6 +23,9 @@ export const userSchema = z.object({
   emailVerified: z.boolean().default(false),
   twoFactorEnabled: z.boolean().default(false),
   provider: z.enum(["email", "github", "google"]).default("email"),
+  subscriptionId: z.string().default(""),
+  paymentUserId: z.string().default(""),
+  isCardAttached: z.boolean().default(false),
   createdAt: z.date().or(z.dateString()),
   updatedAt: z.date().or(z.dateString()),
 });
