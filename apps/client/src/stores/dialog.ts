@@ -1,11 +1,17 @@
 import { SectionKey } from "@reactive-resume/schema";
 import { create } from "zustand";
 
-
-
 // Update DialogName to include coverLetter
-export type DialogName = "resume" | "coverLetter" | "importCL" | "lockCL" | "lock" | "import" | "two-factor" | "subscription" | SectionKey;
-
+export type DialogName =
+  | "resume"
+  | "coverLetter"
+  | "importCL"
+  | "lockCL"
+  | "lock"
+  | "import"
+  | "two-factor"
+  | "subscription"
+  | SectionKey;
 
 export type DialogMode = "create" | "update" | "duplicate" | "delete";
 
@@ -17,7 +23,7 @@ export type DialogPayload<T = unknown> = {
 type Dialog<T = unknown> = {
   name: DialogName;
   mode: DialogMode;
-  payload?: DialogPayload<T>;
+  payload?: DialogPayload<T> | any;
 };
 
 type DialogState = {
@@ -44,8 +50,8 @@ export const useDialog = <T = unknown>(name: DialogName) => {
   return {
     isOpen: !!dialog,
     mode: dialog?.mode,
-    payload: dialog?.payload as DialogPayload<T>,
-    open: (mode: DialogMode, payload?: DialogPayload<T>) => {
+    payload: dialog?.payload as DialogPayload<T> | any,
+    open: (mode: DialogMode, payload?: DialogPayload<T> | any) => {
       useDialogStore.setState({ dialog: { name, mode, payload } });
     },
     close: () => {

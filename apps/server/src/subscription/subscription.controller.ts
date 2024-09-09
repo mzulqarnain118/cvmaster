@@ -26,7 +26,7 @@ export class SubscriptionController {
 
   @Post("/payment-method/attach")
   @UseGuards(TwoFactorGuard)
-  async create(@User() user: UserEntity, @Body() body: any) {
+  async attachPaymentMethod(@User() user: UserEntity, @Body() body: any) {
     try {
       await this.subscriptionService.addCustomerPaymentMethod(
         user.paymentUserId as string,
@@ -40,14 +40,15 @@ export class SubscriptionController {
     }
   }
 
-  // @Post()
-  // @UseGuards(TwoFactorGuard)
-  // async create(@User() user: UserEntity, @Body() createSubscriptionDto: any) {
-  //   try {
-  //     return await this.subscriptionService.create(user.id, createSubscriptionDto);
-  //   } catch (error) {
-  //     Logger.error(error);
-  //     throw new InternalServerErrorException(error);
-  //   }
-  // }
+  @Post()
+  @UseGuards(TwoFactorGuard)
+  async create(@User() user: UserEntity, @Body() body: any) {
+    try {
+      await this.subscriptionService.create(user.paymentUserId as string, user.email, body.id);
+      return true;
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

@@ -1,24 +1,29 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import Stripe from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
+import { PrismaService } from "nestjs-prisma";
 
 const PRODUCT_ID = "prod_QnihnoExaBUFZa";
 
-// const SUBSCRIPTION_STATUS = {
-//   incomplete: "incomplete",
-//   incomplete_expired: "incomplete_expired",
-//   trialing: "trialing",
-//   active: "active",
-//   past_due: "past_due",
-//   canceled: "canceled",
-//   unpaid: "unpaid",
-//   paused: "paused",
-// };
+const SUBSCRIPTION_STATUS = {
+  incomplete: "incomplete",
+  incomplete_expired: "incomplete_expired",
+  trialing: "trialing",
+  active: "active",
+  past_due: "past_due",
+  canceled: "canceled",
+  unpaid: "unpaid",
+  paused: "paused",
+};
 
 @Injectable()
 export class SubscriptionService {
-  constructor(@InjectStripeClient() private stripe: Stripe) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @InjectStripeClient() private stripe: Stripe,
+  ) {}
 
+  // Plans
   async findAllPlans() {
     try {
       const prices = await this.stripe.prices.list({
@@ -32,6 +37,7 @@ export class SubscriptionService {
     }
   }
 
+  // Customers
   async getPaymentUser(id: string) {
     try {
       return (await this.stripe.customers.retrieve(id)) as any;
@@ -39,7 +45,6 @@ export class SubscriptionService {
       throw new InternalServerErrorException(error);
     }
   }
-
   async createPaymentUser(email: string, name: string) {
     try {
       return (await this.stripe.customers.create({ email, name })) as any;
@@ -48,14 +53,13 @@ export class SubscriptionService {
     }
   }
 
+  // Payment Methods
   async createPaymentMethod(card: any) {
     return await this.stripe.paymentMethods.create(card);
   }
-
   async attachPaymentMethod(paymentMethod: string, customer: string) {
     return await this.stripe.paymentMethods.attach(paymentMethod, { customer });
   }
-
   async addCustomerPaymentMethod(customerId: string, source: string, isDefault = true) {
     try {
       // create payment method
@@ -73,6 +77,55 @@ export class SubscriptionService {
       }
 
       return true;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  // Subscriptions
+  async get(id: string) {
+    try {
+      return await this.stripe.subscriptions.retrieve(id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+  async cancel(id: string, cancel_at_period_end = true) {
+    try {
+      const subscription = await this.get(id);
+
+      // remove previous schedule
+      // if (subscription.schedule) await releaseSchedule(subscription.schedule);
+
+      return cancel_at_period_end
+        ? await this.stripe.subscriptions.update(subscription.id, {
+            cancel_at_period_end,
+          })
+        : await this.stripe.subscriptions.cancel(subscription.id);
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+  async create(customerId: string, email: string, priceId: string) {
+    try {
+      const sourceData = await this.stripe.subscriptions.create({
+        customer: customerId,
+        items: [{ price: priceId }],
+      });
+
+      // First payment error
+      if (sourceData.status === SUBSCRIPTION_STATUS.incomplete) {
+        await this.cancel(sourceData.id, false);
+        throw new Error(`Payment attempt fails, please check your payment method`);
+      }
+
+      // update user
+      await this.prisma.user.update({
+        where: { email },
+        data: { subscriptionId: sourceData.id },
+      });
+
+      return sourceData;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }

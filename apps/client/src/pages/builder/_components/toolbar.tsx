@@ -47,7 +47,7 @@ export const BuilderToolbar = () => {
       const { url } = await printResume({ id });
       openInNewTab(url);
     } else {
-      open("create");
+      open("create", { resumeId: id });
     }
   };
 

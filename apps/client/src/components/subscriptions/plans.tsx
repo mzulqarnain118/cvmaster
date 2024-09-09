@@ -1,4 +1,4 @@
-import { Card } from "@reactive-resume/ui";
+import { Card, Button } from "@reactive-resume/ui";
 import Tilt from "react-parallax-tilt";
 
 import { defaultTiltProps } from "@/client/constants/parallax-tilt";
@@ -30,11 +30,19 @@ const BaseCard = ({
   </Tilt>
 );
 
-export const PlanCards = ({ onClick }: { onClick: (id: string) => void }) => {
+export const PlanCards = ({
+  onClick,
+  subscriptionLoading,
+  printLoading,
+}: {
+  onClick: (id: string) => void;
+  subscriptionLoading: boolean;
+  printLoading: boolean;
+}) => {
   const { plans, loading } = usePlans();
 
   return (
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+    <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
       {loading &&
         Array.from({ length: 2 }).map((_, i) => (
           <div
@@ -58,7 +66,7 @@ export const PlanCards = ({ onClick }: { onClick: (id: string) => void }) => {
             >
               <ContextMenu>
                 <ContextMenuTrigger>
-                  <BaseCard className="space-y-0" onClick={() => onClick(plan.id)}>
+                  <BaseCard className="space-y-0">
                     <div className={"p-4 pt-12"}>
                       <h4 className="line-clamp-2 font-medium">{plan.nickname || ""}</h4>
 
@@ -72,6 +80,17 @@ export const PlanCards = ({ onClick }: { onClick: (id: string) => void }) => {
                           ? `${plan.recurring.interval_count} ${plan.recurring.interval}`
                           : ""}
                       </p>
+
+                      <Button
+                        className="mt-5"
+                        variant="outline"
+                        disabled={subscriptionLoading || printLoading}
+                        onClick={() => onClick(plan.id)}
+                      >
+                        <span className="ml-2 text-xs">
+                          {subscriptionLoading || printLoading ? "Loading..." : "Purchase"}
+                        </span>
+                      </Button>
                     </div>
                   </BaseCard>
                 </ContextMenuTrigger>

@@ -10,10 +10,14 @@ const CheckoutForm = ({
   stripe,
   elements,
   onSuccess,
+  subscriptionLoading,
+  printLoading,
 }: {
   stripe: any;
   elements: any;
   onSuccess: () => void;
+  subscriptionLoading: boolean;
+  printLoading: boolean;
 }) => {
   const { attachPaymentMethod, loading } = useAttachPaymentMethod();
 
@@ -37,19 +41,33 @@ const CheckoutForm = ({
     <form onSubmit={handleSubmit}>
       <h3 className="mb-5">Add your Payment Details</h3>
       <CardElement />
-      <button className="mt-5" disabled={!stripe || loading}>
-        {loading ? "Loading..." : "Continue"}
+      <button className="mt-5" disabled={!stripe || loading || subscriptionLoading || printLoading}>
+        {loading || subscriptionLoading || printLoading ? "Loading..." : "Continue"}
       </button>
     </form>
   );
 };
 
-export const Payment = ({ onSuccess }: { onSuccess: () => void }) => {
+export const Payment = ({
+  onSuccess,
+  subscriptionLoading,
+  printLoading,
+}: {
+  onSuccess: () => void;
+  subscriptionLoading: boolean;
+  printLoading: boolean;
+}) => {
   return (
     <Elements stripe={stripePromise}>
       <ElementsConsumer>
         {({ stripe, elements }) => (
-          <CheckoutForm stripe={stripe} elements={elements} onSuccess={onSuccess} />
+          <CheckoutForm
+            stripe={stripe}
+            elements={elements}
+            onSuccess={onSuccess}
+            subscriptionLoading={subscriptionLoading}
+            printLoading={printLoading}
+          />
         )}
       </ElementsConsumer>
     </Elements>
