@@ -127,7 +127,7 @@ export class PrinterService {
         window.localStorage.setItem("resume", JSON.stringify(data));
       }, resume.data);
 
-      await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0" });
+      await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0", timeout: 20_000 });
 
       const pagesBuffer: Buffer[] = [];
 
