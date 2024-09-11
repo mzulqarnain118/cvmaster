@@ -24,7 +24,6 @@ const openInNewTab = (url: string) => {
 export const SubscribeDialog = () => {
   const { createSubscription, loading: subscriptionLoading } = useCreateSubscription();
   const { printResume, loading: printLoading } = usePrintResume();
-
   const { user } = useUser();
   const { isOpen, close, payload } = useDialog("subscription");
 
@@ -32,10 +31,16 @@ export const SubscribeDialog = () => {
   const [selected, setSelected] = useState<string>("");
 
   const purchaseSubscription = async (id: string) => {
-    await createSubscription(id);
-    const { url } = await printResume({ id: payload.resumeId });
-    openInNewTab(url);
-    close();
+    if (user?.subscriptionId) {
+      const { url } = await printResume({ id: payload.resumeId });
+      openInNewTab(url);
+    }
+    else {
+      await createSubscription(id);
+      close();
+      
+    }
+  
   };
 
   const onPlanSelect = (id: string) => {
