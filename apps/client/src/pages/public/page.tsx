@@ -68,7 +68,7 @@ export const PublicResumePage = () => {
   }, [frameRef]);
 
   const onDownloadPdf = async () => {
-    if (user?.subscriptionId) {
+    if (user?.isSubscriptionActive) {
       const { url } = await printResume({ id });
       openInNewTab(url);
     } else {

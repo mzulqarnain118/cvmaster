@@ -21,6 +21,7 @@ import { TwoFactorGuard } from "../auth/guards/two-factor.guard";
 import { User } from "./decorators/user.decorator";
 import { UserService } from "./user.service";
 import { SubscriptionService } from "../subscription/subscription.service";
+import { subscriptionActive } from "../subscription/utils/helpers";
 
 @ApiTags("User")
 @Controller("user")
@@ -47,6 +48,10 @@ export class UserController {
       paymentUser?.invoice_settings?.default_payment_method || paymentUser?.default_source
         ? true
         : false;
+
+    user.isSubscriptionActive = user.subscriptionId
+      ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
+      : false;
 
     return user;
   }
@@ -88,7 +93,11 @@ export class UserController {
           ? true
           : false;
 
-      return { ...returnUser, isCardAttached };
+      const isSubscriptionActive = user.subscriptionId
+        ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
+        : false;
+
+      return { ...returnUser, isCardAttached, isSubscriptionActive };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
         throw new BadRequestException(ErrorMessage.UserAlreadyExists);

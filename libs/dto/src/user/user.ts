@@ -26,6 +26,7 @@ export const userSchema = z.object({
   subscriptionId: z.string().default(""),
   paymentUserId: z.string().default(""),
   isCardAttached: z.boolean().default(false),
+  isSubscriptionActive: z.boolean().default(false),
   createdAt: z.date().or(z.dateString()),
   updatedAt: z.date().or(z.dateString()),
 });

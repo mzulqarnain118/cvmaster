@@ -32,11 +32,8 @@ export const ExportSection = () => {
 
   const onPdfExport = async () => {
     const { resume } = useResumeStore.getState();
-
-    if (user?.subscriptionId) {
-
-    const { url } = await printResume({ id: resume.id });
-
+    if (user?.isSubscriptionActive) {
+      const { url } = await printResume({ id: resume.id });
       openInNewTab(url);
     } else {
       open("create", { resumeId: resume.id });

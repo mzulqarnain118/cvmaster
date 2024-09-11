@@ -2,19 +2,9 @@ import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import Stripe from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
 import { PrismaService } from "nestjs-prisma";
+import { SUBSCRIPTION_STATUS } from "./utils/constants";
 
 const PRODUCT_ID = "prod_QnihnoExaBUFZa";
-
-const SUBSCRIPTION_STATUS = {
-  incomplete: "incomplete",
-  incomplete_expired: "incomplete_expired",
-  trialing: "trialing",
-  active: "active",
-  past_due: "past_due",
-  canceled: "canceled",
-  unpaid: "unpaid",
-  paused: "paused",
-};
 
 @Injectable()
 export class SubscriptionService {

@@ -31,16 +31,13 @@ export const SubscribeDialog = () => {
   const [selected, setSelected] = useState<string>("");
 
   const purchaseSubscription = async (id: string) => {
-    if (user?.subscriptionId) {
+    if (user?.isSubscriptionActive) {
       const { url } = await printResume({ id: payload.resumeId });
       openInNewTab(url);
-    }
-    else {
+    } else {
       await createSubscription(id);
       close();
-      
     }
-  
   };
 
   const onPlanSelect = (id: string) => {

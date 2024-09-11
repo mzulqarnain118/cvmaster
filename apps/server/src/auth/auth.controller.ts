@@ -41,6 +41,7 @@ import { getCookieOptions } from "./utils/cookie";
 import { payloadSchema } from "./utils/payload";
 import { SubscriptionService } from "../subscription/subscription.service";
 import { UserService } from "../user/user.service";
+import { subscriptionActive } from "../subscription/utils/helpers";
 
 @ApiTags("Authentication")
 @Controller("auth")
@@ -121,6 +122,10 @@ export class AuthController {
       paymentUser?.invoice_settings?.default_payment_method || paymentUser?.default_source
         ? true
         : false;
+
+    user.isSubscriptionActive = user.subscriptionId
+      ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
+      : false;
 
     return this.handleAuthenticationResponse(user, response);
   }

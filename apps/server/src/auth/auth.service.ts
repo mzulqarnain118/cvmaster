@@ -126,7 +126,7 @@ export class AuthService {
       // Do not `await` this function, otherwise the user will have to wait for the email to be sent before the response is returned
       void this.sendVerificationEmail(user.email);
 
-      return { ...user, isCardAttached: false } as UserWithSecrets;
+      return { ...user, isCardAttached: false, isSubscriptionActive: false } as UserWithSecrets;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
         throw new BadRequestException(ErrorMessage.UserAlreadyExists);
