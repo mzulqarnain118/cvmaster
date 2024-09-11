@@ -127,7 +127,7 @@ export class PrinterService {
         window.localStorage.setItem("resume", JSON.stringify(data));
       }, resume.data);
 
-      await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0" });
+      await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0", timeout: 20_000 });
 
       const pagesBuffer: Buffer[] = [];
 
@@ -241,7 +241,7 @@ export class PrinterService {
 
     await page.setViewport({ width: 794, height: 1123 });
 
-    await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0" });
+    await page.goto(`${url}/artboard/preview`, { waitUntil: "networkidle0", timeout: 20_000 });
 
     // Save the JPEG to storage and return the URL
     // Store the URL in cache for future requests, under the previously generated hash digest
