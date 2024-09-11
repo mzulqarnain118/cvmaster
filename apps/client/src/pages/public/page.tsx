@@ -11,6 +11,9 @@ import { Icon } from "@/client/components/icon";
 import { ThemeSwitch } from "@/client/components/theme-switch";
 import { queryClient } from "@/client/libs/query-client";
 import { findResumeByUsernameSlug, usePrintResume } from "@/client/services/resume";
+import { useUser } from "@/client/services/user";
+import { useDialog } from "@/client/stores/dialog";
+import { useResumeStore } from "@/client/stores/resume";
 
 const openInNewTab = (url: string) => {
   const win = window.open(url, "_blank");
@@ -18,6 +21,10 @@ const openInNewTab = (url: string) => {
 };
 
 export const PublicResumePage = () => {
+  const { user } = useUser();
+  const { open } = useDialog("subscription");
+  const resumeId = useResumeStore((state) => state.resume.id);
+
   const frameRef = useRef<HTMLIFrameElement>(null);
 
   const { printResume, loading } = usePrintResume();
@@ -61,9 +68,12 @@ export const PublicResumePage = () => {
   }, [frameRef]);
 
   const onDownloadPdf = async () => {
-    const { url } = await printResume({ id });
-
-    openInNewTab(url);
+    if (user?.subscriptionId) {
+      const { url } = await printResume({ id });
+      openInNewTab(url);
+    } else {
+      open("create", { resumeId });
+    }
   };
 
   return (

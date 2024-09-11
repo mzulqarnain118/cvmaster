@@ -52,14 +52,20 @@ export const BuilderToolbar = () => {
   };
 
   const onCopy = async () => {
+    if (user?.subscriptionId) {
+
     const { url } = await printResume({ id });
     await navigator.clipboard.writeText(url);
-
     toast({
       variant: "success",
       title: t`A link has been copied to your clipboard.`,
       description: t`Anyone with this link can view and download the resume. Share it on your profile or with recruiters.`,
     });
+  } else {
+    open("create", { resumeId: id });
+  }
+
+
   };
 
   const onZoomIn = () => frameRef?.contentWindow?.postMessage({ type: "ZOOM_IN" }, "*");

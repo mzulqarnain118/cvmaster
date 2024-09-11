@@ -8,6 +8,8 @@ import { usePrintResume } from "@/client/services/resume/print";
 import { useResumeStore } from "@/client/stores/resume";
 
 import { getSectionIcon } from "../shared/section-icon";
+import { useUser } from "@/client/services/user";
+import { useDialog } from "@/client/stores/dialog";
 
 const onJsonExport = () => {
   const { resume } = useResumeStore.getState();
@@ -23,13 +25,22 @@ const openInNewTab = (url: string) => {
 };
 
 export const ExportSection = () => {
+  const { user } = useUser();
+  const { open } = useDialog("subscription");
+
   const { printResume, loading } = usePrintResume();
 
   const onPdfExport = async () => {
     const { resume } = useResumeStore.getState();
+
+    if (user?.subscriptionId) {
+
     const { url } = await printResume({ id: resume.id });
 
-    openInNewTab(url);
+      openInNewTab(url);
+    } else {
+      open("create", { resumeId: resume.id });
+    }
   };
 
   return (
