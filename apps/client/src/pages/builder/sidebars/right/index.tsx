@@ -48,8 +48,8 @@ export const RightSidebar = () => {
           <NotesSection />
           <Separator />
           <InformationSection /> */}
-          <Separator />
-          <Copyright className="text-center" />
+          {/* <Separator /> */}
+          {/* <Copyright className="text-center" /> */}
         </div>
       </ScrollArea>
 

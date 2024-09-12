@@ -97,7 +97,7 @@ export const PublicResumePage = () => {
       </div>
 
       <div className="flex justify-center py-10 opacity-50 print:hidden">
-        <Link to="/">
+        <Link to="https://cv.edxconnect.com">
           <Button size="sm" variant="ghost" className="space-x-1.5 text-xs font-normal">
             <span>{t`Built with`}</span>
             <Icon size={12} />

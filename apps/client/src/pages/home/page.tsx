@@ -20,9 +20,9 @@ export const HomePage = () => {
       <Helmet prioritizeSeoTags>
         <html lang={i18n.locale} />
 
-        <title>
+        {/* <title>
           {t`CV Master`} - {t`CV Master`}
-        </title>
+        </title> */}
 
         <meta
           name="description"

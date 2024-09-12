@@ -19,7 +19,7 @@ export const Footer = () => (
 
        
 
-        <Copyright className="mt-6" />
+        {/* <Copyright className="mt-6" /> */}
       </div>
 
       <div className="relative col-start-4 flex flex-col items-end justify-end">

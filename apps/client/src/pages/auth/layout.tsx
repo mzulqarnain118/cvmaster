@@ -27,7 +27,7 @@ export const AuthLayout = () => {
     <div className="flex h-screen w-screen">
       <div className="relative flex w-full flex-col justify-center gap-y-8 px-12 sm:mx-auto sm:basis-[420px] sm:px-0 lg:basis-[480px] lg:px-12">
         <div className="flex items-center justify-between">
-          <Link to="/" className="size-24">
+        <Link to="https://cv.edxconnect.com"className="size-24">
             <Logo className="-ml-3" size={96} />
           </Link>
 
