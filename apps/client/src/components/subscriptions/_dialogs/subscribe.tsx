@@ -15,11 +15,9 @@ import { useEffect, useState } from "react";
 import { useUpdateUser, useUser } from "@/client/services/user";
 import { useCreateSubscription } from "@/client/services/subscription";
 import { usePrintResume } from "@/client/services/resume";
+import { openInNewTab } from "@reactive-resume/utils";
 
-const openInNewTab = (url: string) => {
-  const win = window.open(url, "_blank");
-  if (win) win.focus();
-};
+
 
 export const SubscribeDialog = () => {
   const { createSubscription, loading: subscriptionLoading } = useCreateSubscription();
