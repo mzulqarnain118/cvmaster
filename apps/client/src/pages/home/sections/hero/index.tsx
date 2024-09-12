@@ -32,7 +32,7 @@ export const HeroSection = () => (
         </div>
 
         <p className="prose prose-base prose-zinc mt-6 text-lg leading-8 dark:prose-invert">
-          {t`Lorem ipsum dolor sit amet consectetur. Odio est elit feugiat mauris mauris sit nisl. Mauris risus diam tortor tortor. Tellus aenean ultrices neque mattis. In metus dictum fames malesuada amet ut cursus.`}
+          Lorem ipsum dolor sit amet consectetur. Odio est elit feugiat mauris mauris sit nisl. Mauris risus diam tortor tortor. Tellus aenean ultrices neque mattis. In metus dictum fames malesuada amet ut cursus.
         </p>
 
         <div className="mt-10 flex items-center gap-x-8">

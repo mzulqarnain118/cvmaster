@@ -20,20 +20,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - cv-network
 
   # Storage (for image uploads)
   minio:
     image: minio/minio
     restart: unless-stopped
-    command: server /data
+    command:  server /data 
     ports:
       - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio_data:/data
     environment:
+      MINIO_ADDRESS: :9000
+      MINIO_CONSOLE_ADDRESS: :9001
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-
+    networks:
+      - cv-network
   # Chrome Browser (for printing and previews)
   chrome:
     image: ghcr.io/browserless/chromium:latest
@@ -44,9 +50,10 @@ services:
       TOKEN: chrome_token
       EXIT_ON_HEALTH_FAILURE: true
       PRE_REQUEST_HEALTH_CHECK: true
-
+    networks:
+      - cv-network
   app:
-    image: amruthpillai/reactive-resume:latest
+    image: registry-gitlab.softech.co.uk/cv_master/cv_backend:v7
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -60,8 +67,8 @@ services:
       NODE_ENV: production
 
       # -- URLs --
-      PUBLIC_URL: http://localhost:3000
-      STORAGE_URL: http://localhost:9000/default
+      PUBLIC_URL: https://cv-app.edxconnect.com
+      STORAGE_URL: https://minio.edxconnect.com/default
 
       # -- Printer (Chrome) --
       CHROME_TOKEN: chrome_token
@@ -73,7 +80,9 @@ services:
       # -- Auth --
       ACCESS_TOKEN_SECRET: access_token_secret
       REFRESH_TOKEN_SECRET: refresh_token_secret
-
+      # -- Stripe --
+      STRIPE_SECRET_KEY: sk_test_51MPNmZAmjpmKiIpxX66l0P9I2PVVAdSoK81xFa6d2LplIjImI5Bp971wqTeLjoJm9CTBwImh3TOd7cai0Lwg3mde00CrMMq5kI
+      STRIPE_PUBLIC_KEY: pk_test_51MPNmZAmjpmKiIpxOPgBvB8pRZR0KoE6KFdEyOCGY6F4R6KwHPiWG4z6B0vZdkFn6DN1Z1x9UsXtDX2njOTaNGkI00fmuLeg5J
       # -- Emails --
       MAIL_FROM: noreply@localhost
       # SMTP_URL: smtp://user:pass@smtp:587 # Optional
@@ -87,7 +96,8 @@ services:
       STORAGE_SECRET_KEY: minioadmin
       STORAGE_USE_SSL: false
       STORAGE_SKIP_BUCKET_CHECK: false
-
+    networks:
+      - cv-network
       # -- Crowdin (Optional) --
       # CROWDIN_PROJECT_ID:
       # CROWDIN_PERSONAL_TOKEN:
@@ -109,3 +119,10 @@ services:
 volumes:
   minio_data:
   postgres_data:
+
+networks:
+  cv-network:
+    driver: bridge
+
+
+ 

@@ -4,8 +4,6 @@ import { fetchUser } from "../user";
 import { useAuthStore } from "@/client/stores/auth";
 import { queryClient } from "@/client/libs/query-client";
 import { toast } from "@/client/hooks/use-toast";
-import { t } from "@lingui/macro";
-import { CreditCard } from "@phosphor-icons/react";
 import { printResume } from "../resume";
 import { useResumeStore } from "@/client/stores/resume";
 import { openInNewTab } from "@reactive-resume/utils";
@@ -30,8 +28,8 @@ export const useCreateSubscription = () => {
       queryClient.setQueryData(["user"], updatedUser);
       toast({
         variant: "success",
-        title: t`Subscription Activated`,
-        description: t`Thanks for the payment. Your resume has been downloaded in PDF format successfully.`,
+        title: `Subscription Activated`,
+        description: `Thanks for the payment. Your resume has been downloaded in PDF format successfully.`,
       });
       const {url} = await printResume({id:resumeId})
 
