@@ -7,8 +7,8 @@
     "target": "http://localhost:6173",
     "secure": false
   },
-  "/admin": {
-    "target": "http://localhost:3005",
+  "/client": {
+    "target": "http://localhost:5173",
     "secure": false
   }
 }

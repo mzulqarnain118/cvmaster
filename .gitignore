@@ -5,6 +5,8 @@ tmp
 
 # Project Dependencies
 node_modules
+dist
+build
 
 # IDEs and Editors
 /.idea
