@@ -1,6 +1,7 @@
 import { useAttachPaymentMethod } from "@/client/services/subscription";
 import { Elements, ElementsConsumer, CardElement } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { Card, Button } from "@reactive-resume/ui";
 
 const stripePromise = loadStripe(
   "pk_test_51MPNmZAmjpmKiIpxOPgBvB8pRZR0KoE6KFdEyOCGY6F4R6KwHPiWG4z6B0vZdkFn6DN1Z1x9UsXtDX2njOTaNGkI00fmuLeg5J",
@@ -41,9 +42,10 @@ const CheckoutForm = ({
     <form onSubmit={handleSubmit}>
       <h3 className="mb-5">Add your Payment Details</h3>
       <CardElement />
-      <button className="mt-5" disabled={!stripe || loading || subscriptionLoading || printLoading}>
+      <Button    className="w-full mt-5"
+                        variant="primary"  disabled={!stripe || loading || subscriptionLoading || printLoading}>
         {loading || subscriptionLoading || printLoading ? "Loading..." : "Continue"}
-      </button>
+      </Button>
     </form>
   );
 };
