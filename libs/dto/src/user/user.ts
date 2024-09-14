@@ -25,6 +25,7 @@ export const userSchema = z.object({
   provider: z.enum(["email", "github", "google"]).default("email"),
   subscriptionId: z.string().default(""),
   paymentUserId: z.string().default(""),
+  role: z.enum(["user", "admin"]).default("user"),
   isCardAttached: z.boolean().default(false),
   isSubscriptionActive: z.boolean().default(false),
   createdAt: z.date().or(z.dateString()),

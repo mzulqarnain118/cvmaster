@@ -10,12 +10,15 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { useLogout } from "../services/auth";
+import { useUser } from "@/client/services/user";
 
 type Props = {
   children: React.ReactNode;
 };
 
 export const UserOptions = ({ children }: Props) => {
+  const { user } = useUser();
+
   const navigate = useNavigate();
   const { logout } = useLogout();
 
@@ -26,7 +29,7 @@ export const UserOptions = ({ children }: Props) => {
       <DropdownMenuContent side="top" align="start" className="w-48">
         <DropdownMenuItem
           onClick={() => {
-            navigate("/dashboard/settings");
+            navigate(user?.role === "admin" ? "/admin/settings" : "/dashboard/settings");
           }}
         >
           {t`Settings`}

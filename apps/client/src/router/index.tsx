@@ -14,6 +14,8 @@ import { DashboardLayout } from "../pages/dashboard/layout";
 import { ResumesPage } from "../pages/dashboard/resumes/page";
 import { CoverLettersPage } from "../pages/dashboard/coverLetters/page";
 import { SettingsPage } from "../pages/dashboard/settings/page";
+import { UsersPage } from "../pages/dashboard/users/page";
+import { PlansPage } from "../pages/dashboard/plans/page";
 import { HomeLayout } from "../pages/home/layout";
 import { PrivacyPolicyPage } from "../pages/home/meta/privacy-policy/page";
 import { HomePage } from "../pages/home/page";
@@ -22,6 +24,7 @@ import { Providers } from "../providers";
 import { AuthGuard } from "./guards/auth";
 import { GuestGuard } from "./guards/guest";
 import { authLoader } from "./loaders/auth";
+import { AdminAuthGuard } from "./guards/adminAuth";
 
 export const routes = createRoutesFromElements(
   <Route element={<Providers />}>
@@ -73,6 +76,18 @@ export const routes = createRoutesFromElements(
           <Route path="settings" element={<SettingsPage />} />
 
           <Route index element={<Navigate replace to="/dashboard/resumes" />} />
+        </Route>
+      </Route>
+    </Route>
+
+    <Route path="admin">
+      <Route element={<AdminAuthGuard />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="users" element={<UsersPage />} />
+          <Route path="plans" element={<PlansPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+
+          <Route index element={<Navigate replace to="/admin/users" />} />
         </Route>
       </Route>
     </Route>

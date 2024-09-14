@@ -9,13 +9,14 @@ import { useAuthStore } from "@/client/stores/auth";
 export const HeroCTA = () => {
   const { logout } = useLogout();
 
-  const isLoggedIn = useAuthStore((state) => !!state.user);
+  const { user } = useAuthStore((state) => state);
+  const isLoggedIn = !!user;
 
   if (isLoggedIn) {
     return (
       <>
         <Button asChild size="lg">
-          <Link to="/dashboard">{t`Go to Dashboard`}</Link>
+          <Link to={user.role === "admin" ? "/admin" : "/dashboard"}>{t`Go to Dashboard`}</Link>
         </Button>
 
         <Button size="lg" variant="link" onClick={() => logout()}>

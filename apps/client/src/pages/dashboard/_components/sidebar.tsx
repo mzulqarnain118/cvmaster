@@ -32,6 +32,7 @@ type SidebarItem = {
   name: string;
   shortcut?: string;
   icon: React.ReactNode;
+  hidden: boolean;
 };
 
 type SidebarItemProps = SidebarItem & {
@@ -85,24 +86,53 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
     setOpen?.(false);
   });
 
+  useKeyboardShortcut(["shift", "u"], () => {
+    navigate("/admin/users");
+    setOpen?.(false);
+  });
+
+  useKeyboardShortcut(["shift", "p"], () => {
+    navigate("/admin/plans");
+    setOpen?.(false);
+  });
+
   const sidebarItems: SidebarItem[] = [
     {
       path: "/dashboard/resumes",
       name: t`Resumes`,
       shortcut: "⇧R",
       icon: <ReadCvLogo />,
+      hidden: !(user?.role === "user"),
     },
     {
       path: "/dashboard/cover-letters",
       name: `Cover Letters`,
       shortcut: "⇧C",
       icon: <ReadCvLogo />,
+      hidden: !(user?.role === "user"),
     },
     {
       path: "/dashboard/settings",
       name: t`Settings`,
       shortcut: "⇧S",
       icon: <FadersHorizontal />,
+      hidden: !(user?.role === "user"),
+    },
+
+    // admin
+    {
+      path: "/admin/users",
+      name: `Users`,
+      shortcut: "⇧u",
+      icon: <FadersHorizontal />,
+      hidden: !(user?.role === "admin"),
+    },
+    {
+      path: "/admin/plans",
+      name: `Plans`,
+      shortcut: "⇧p",
+      icon: <FadersHorizontal />,
+      hidden: !(user?.role === "admin"),
     },
   ];
 
@@ -119,9 +149,13 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
       <Separator className="opacity-50" />
 
       <div className="grid gap-y-2">
-        {sidebarItems.map((item) => (
-          <SidebarItem {...item} key={item.path} onClick={() => setOpen?.(false)} />
-        ))}
+        {sidebarItems.map((item) => {
+          return item.hidden ? (
+            <></>
+          ) : (
+            <SidebarItem {...item} key={item.path} onClick={() => setOpen?.(false)} />
+          );
+        })}
       </div>
 
       <div className="flex-1" />
