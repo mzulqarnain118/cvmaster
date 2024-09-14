@@ -70,38 +70,27 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
   const { user } = useUser();
   const navigate = useNavigate();
 
-  useKeyboardShortcut(["shift", "r"], () => {
-    navigate("/dashboard/resumes");
+  useKeyboardShortcut(["shift", "u"], () => {
+    navigate("/admin/users");
     setOpen?.(false);
   });
 
-  useKeyboardShortcut(["shift", "c"], () => {
-    navigate("/dashboard/cover-letters");
-    setOpen?.(false);
-  });
-
-  useKeyboardShortcut(["shift", "s"], () => {
-    navigate("/dashboard/settings");
+  useKeyboardShortcut(["shift", "p"], () => {
+    navigate("/admin/plans");
     setOpen?.(false);
   });
 
   const sidebarItems: SidebarItem[] = [
     {
-      path: "/dashboard/resumes",
-      name: t`Resumes`,
-      shortcut: "⇧R",
-      icon: <ReadCvLogo />,
+      path: "/admin/users",
+      name: `Users`,
+      shortcut: "⇧u",
+      icon: <FadersHorizontal />,
     },
     {
-      path: "/dashboard/cover-letters",
-      name: `Cover Letters`,
-      shortcut: "⇧C",
-      icon: <ReadCvLogo />,
-    },
-    {
-      path: "/dashboard/settings",
-      name: t`Settings`,
-      shortcut: "⇧S",
+      path: "/admin/plans",
+      name: `Plans`,
+      shortcut: "⇧p",
       icon: <FadersHorizontal />,
     },
   ];
