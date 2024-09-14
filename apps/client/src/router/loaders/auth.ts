@@ -29,6 +29,6 @@ export const authLoader: LoaderFunction<UserDto> = async ({ request }) => {
   if (status === "authenticated") {
     useAuthStore.setState({ user });
 
-    return redirect("/dashboard");
+    return redirect(user.role === "admin" ? "/admin" : "/dashboard");
   }
 };
