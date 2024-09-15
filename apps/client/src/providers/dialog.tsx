@@ -20,6 +20,7 @@ import { LockCLDialog } from "../pages/dashboard/coverLetters/_dialogs/lock";
 import { CoverLetterDialog } from "../pages/dashboard/coverLetters/_dialogs/coverLetter";
 import { TwoFactorDialog } from "../pages/dashboard/settings/_dialogs/two-factor";
 import { useResumeStore } from "../stores/resume";
+import { PlanDialog } from "../pages/admin/plans/_dialogs/plan";
 
 type Props = {
   children: React.ReactNode;
@@ -41,6 +42,7 @@ export const DialogProvider = ({ children }: Props) => {
         <ImportCLDialog />
         <TwoFactorDialog />
         <SubscribeDialog />
+        <PlanDialog />
 
         {isResumeLoaded && (
           <>

@@ -1,11 +1,11 @@
+import { PlanDto } from "@reactive-resume/dto";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
-
 import { PLANS_KEY } from "@/client/constants/query-keys";
 import { axios } from "@/client/libs/axios";
 
 export const fetchPlans = async () => {
-  const response = await axios.get<any[], AxiosResponse<any[]>>("/subscription/plans");
+  const response = await axios.get<PlanDto[], AxiosResponse<PlanDto[]>>("/subscription/plan");
   return response.data;
 };
 

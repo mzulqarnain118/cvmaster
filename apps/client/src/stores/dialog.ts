@@ -11,6 +11,7 @@ export type DialogName =
   | "import"
   | "two-factor"
   | "subscription"
+  | "plan"
   | SectionKey;
 
 export type DialogMode = "create" | "update" | "duplicate" | "delete";

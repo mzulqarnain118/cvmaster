@@ -1,7 +1,7 @@
 import { Card, Button } from "@reactive-resume/ui";
 import Tilt from "react-parallax-tilt";
 import { defaultTiltProps } from "@/client/constants/parallax-tilt";
-import { usePlans } from "@/client/services/subscription";
+import { usePlans } from "@/client/services/plan";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@reactive-resume/utils";
 import { ContextMenu, ContextMenuTrigger } from "@reactive-resume/ui";
@@ -74,11 +74,11 @@ export const PlanCards = ({
                 <ContextMenuTrigger>
                   <BaseCard className="space-y-0" isPopular={index === 1}>
                     <div className="p-6 text-center">
-                      <h3 className="text-2xl font-bold mb-2">{plan.nickname || ""}</h3>
+                      <h3 className="text-2xl font-bold mb-2">{plan.name || ""}</h3>
                       <p className="text-3xl font-extrabold mb-4">
-                        ${plan.unit_amount ? (plan.unit_amount / 100).toFixed(2) : ""}
+                        ${plan.price ?? 0}
                         <span className="text-sm font-normal">
-                          /{plan.recurring?.interval || ""}
+                          / {plan.duration === "days" ? plan.days : ""} {plan.duration}
                         </span>
                       </p>
                       <ul className="text-sm mb-6">
@@ -99,7 +99,7 @@ export const PlanCards = ({
                         className="w-full"
                         variant="primary"
                         disabled={subscriptionLoading || printLoading}
-                        onClick={() => onClick(plan.id)}
+                        onClick={() => onClick(plan.priceId)}
                       >
                         {subscriptionLoading || printLoading ? "Processing..." : "Get Started"}
                       </Button>

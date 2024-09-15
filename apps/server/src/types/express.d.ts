@@ -1,4 +1,4 @@
-import { Resume, User as PrismaUser } from "@prisma/client";
+import { Resume, Plans, User as PrismaUser } from "@prisma/client";
 
 declare global {
   namespace Express {
@@ -6,7 +6,8 @@ declare global {
     interface Request {
       user?: PrismaUser;
       payload?: {
-        resume: Resume;
+        resume?: Resume;
+        plan?: Plans;
       };
     }
   }
