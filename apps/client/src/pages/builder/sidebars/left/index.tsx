@@ -32,12 +32,135 @@ import { SummarySection } from "./sections/summary";
 export const LeftSidebar = () => {
   const containterRef = useRef<HTMLDivElement | null>(null);
 
-  const addSection = useResumeStore((state) => state.addSection);
+  const { addSection, resume } = useResumeStore((state) => state);
   const customSections = useResumeStore((state) => state.resume.data.sections.custom);
+  const type = useResumeStore((state) => state.resume.type);
 
   const scrollIntoView = (selector: string) => {
     const section = containterRef.current?.querySelector(selector);
     section?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const renderSections = () => {
+    if (type === "coverLetter") {
+      return (
+        <>
+          <BasicsSection />
+          <Separator />
+          <SummarySection />
+          <Separator />
+          <SectionBase<Profile>
+            id="profiles"
+            title={(item) => item.network}
+            description={(item) => item.username}
+          />
+          <Separator />
+          <SectionBase
+            id="coverLetter"
+            title={() => t`Cover Letter`}
+            description={() => t`Your cover letter content`}
+          />
+        </>
+      );
+    }
+
+    return (
+      <>
+        <BasicsSection />
+        <Separator />
+        <SummarySection />
+        <Separator />
+        <SectionBase<Profile>
+          id="profiles"
+          title={(item) => item.network}
+          description={(item) => item.username}
+        />
+        <Separator />
+        <SectionBase<Experience>
+          id="experience"
+          title={(item) => item.company}
+          description={(item) => item.position}
+        />
+        <Separator />
+        <SectionBase<Education>
+          id="education"
+          title={(item) => item.institution}
+          description={(item) => item.area}
+        />
+        <Separator />
+        <SectionBase<Skill>
+          id="skills"
+          title={(item) => item.name}
+          description={(item) => {
+            if (item.description) return item.description;
+            if (item.keywords.length > 0) return `${item.keywords.length} keywords`;
+          }}
+        />
+        <Separator />
+        <SectionBase<Language>
+          id="languages"
+          title={(item) => item.name}
+          description={(item) => item.description}
+        />
+        <Separator />
+        <SectionBase<Award>
+          id="awards"
+          title={(item) => item.title}
+          description={(item) => item.awarder}
+        />
+        <Separator />
+        <SectionBase<Certification>
+          id="certifications"
+          title={(item) => item.name}
+          description={(item) => item.issuer}
+        />
+        <Separator />
+        <SectionBase<Interest>
+          id="interests"
+          title={(item) => item.name}
+          description={(item) => {
+            if (item.keywords.length > 0) return `${item.keywords.length} keywords`;
+          }}
+        />
+        <Separator />
+        <SectionBase<Project>
+          id="projects"
+          title={(item) => item.name}
+          description={(item) => item.description}
+        />
+        <Separator />
+        <SectionBase<Publication>
+          id="publications"
+          title={(item) => item.name}
+          description={(item) => item.publisher}
+        />
+        <Separator />
+        <SectionBase<Volunteer>
+          id="volunteer"
+          title={(item) => item.organization}
+          description={(item) => item.position}
+        />
+        <Separator />
+        <SectionBase<Reference>
+          id="references"
+          title={(item) => item.name}
+          description={(item) => item.description}
+        />
+
+        {/* Custom Sections */}
+        {Object.values(customSections).map((section) => (
+          <Fragment key={section.id}>
+            <Separator />
+
+            <SectionBase<CustomSection>
+              id={`custom.${section.id}`}
+              title={(item) => item.name}
+              description={(item) => item.description}
+            />
+          </Fragment>
+        ))}
+      </>
+    );
   };
 
   return (
@@ -50,95 +173,92 @@ export const LeftSidebar = () => {
         </Button>
 
         <div className="flex flex-col items-center justify-center gap-y-2">
-          <SectionIcon
-            id="basics"
-            name={t({
-              message: "Basics",
-              context:
-                "The basics section of a resume consists of User's Picture, Full Name, Location etc.",
-            })}
-            onClick={() => {
-              scrollIntoView("#basics");
-            }}
-          />
-          <SectionIcon
-            id="summary"
-            onClick={() => {
-              scrollIntoView("#summary");
-            }}
-          />
-          <SectionIcon
-            id="profiles"
-            onClick={() => {
-              scrollIntoView("#profiles");
-            }}
-          />
-          <SectionIcon
-            id="experience"
-            onClick={() => {
-              scrollIntoView("#experience");
-            }}
-          />
-          <SectionIcon
-            id="education"
-            onClick={() => {
-              scrollIntoView("#education");
-            }}
-          />
-          <SectionIcon
-            id="skills"
-            onClick={() => {
-              scrollIntoView("#skills");
-            }}
-          />
-          <SectionIcon
-            id="languages"
-            onClick={() => {
-              scrollIntoView("#languages");
-            }}
-          />
-          <SectionIcon
-            id="awards"
-            onClick={() => {
-              scrollIntoView("#awards");
-            }}
-          />
-          <SectionIcon
-            id="certifications"
-            onClick={() => {
-              scrollIntoView("#certifications");
-            }}
-          />
-          <SectionIcon
-            id="interests"
-            onClick={() => {
-              scrollIntoView("#interests");
-            }}
-          />
-          <SectionIcon
-            id="projects"
-            onClick={() => {
-              scrollIntoView("#projects");
-            }}
-          />
-          <SectionIcon
-            id="publications"
-            onClick={() => {
-              scrollIntoView("#publications");
-            }}
-          />
-          <SectionIcon
-            id="volunteer"
-            onClick={() => {
-              scrollIntoView("#volunteer");
-            }}
-          />
-          <SectionIcon
-            id="references"
-            onClick={() => {
-              scrollIntoView("#references");
-            }}
-          />
+          {type === "coverLetter" ? (
+            <>
+              <SectionIcon
+                id="basics"
+                name={t`Basics`}
+                onClick={() => scrollIntoView("#basics")}
+              />
+              <SectionIcon
+                id="summary"
+                onClick={() => scrollIntoView("#summary")}
+              />
+              <SectionIcon
+                id="profiles"
+                onClick={() => scrollIntoView("#profiles")}
+              />
+              <SectionIcon
+                id="coverLetter"
+                name={t`Cover Letter`}
+                onClick={() => scrollIntoView("#coverLetter")}
+              />
+            </>
+          ) : (
+            <>
+              <SectionIcon
+                id="basics"
+                name={t({
+                  message: "Basics",
+                  context:
+                    "The basics section of a resume consists of User's Picture, Full Name, Location etc.",
+                })}
+                onClick={() => scrollIntoView("#basics")}
+              />
+              <SectionIcon
+                id="summary"
+                onClick={() => scrollIntoView("#summary")}
+              />
+              <SectionIcon
+                id="profiles"
+                onClick={() => scrollIntoView("#profiles")}
+              />
+              <SectionIcon
+                id="experience"
+                onClick={() => scrollIntoView("#experience")}
+              />
+              <SectionIcon
+                id="education"
+                onClick={() => scrollIntoView("#education")}
+              />
+              <SectionIcon
+                id="skills"
+                onClick={() => scrollIntoView("#skills")}
+              />
+              <SectionIcon
+                id="languages"
+                onClick={() => scrollIntoView("#languages")}
+              />
+              <SectionIcon
+                id="awards"
+                onClick={() => scrollIntoView("#awards")}
+              />
+              <SectionIcon
+                id="certifications"
+                onClick={() => scrollIntoView("#certifications")}
+              />
+              <SectionIcon
+                id="interests"
+                onClick={() => scrollIntoView("#interests")}
+              />
+              <SectionIcon
+                id="projects"
+                onClick={() => scrollIntoView("#projects")}
+              />
+              <SectionIcon
+                id="publications"
+                onClick={() => scrollIntoView("#publications")}
+              />
+              <SectionIcon
+                id="volunteer"
+                onClick={() => scrollIntoView("#volunteer")}
+              />
+              <SectionIcon
+                id="references"
+                onClick={() => scrollIntoView("#references")}
+              />
+            </>
+          )}
 
           <SectionIcon
             id="custom"
@@ -162,99 +282,7 @@ export const LeftSidebar = () => {
 
       <ScrollArea orientation="vertical" className="h-screen flex-1 pb-16 lg:pb-0">
         <div ref={containterRef} className="grid gap-y-6 p-6 @container/left">
-          <BasicsSection />
-          <Separator />
-          <SummarySection />
-          <Separator />
-          <SectionBase<Profile>
-            id="profiles"
-            title={(item) => item.network}
-            description={(item) => item.username}
-          />
-          <Separator />
-          <SectionBase<Experience>
-            id="experience"
-            title={(item) => item.company}
-            description={(item) => item.position}
-          />
-          <Separator />
-          <SectionBase<Education>
-            id="education"
-            title={(item) => item.institution}
-            description={(item) => item.area}
-          />
-          <Separator />
-          <SectionBase<Skill>
-            id="skills"
-            title={(item) => item.name}
-            description={(item) => {
-              if (item.description) return item.description;
-              if (item.keywords.length > 0) return `${item.keywords.length} keywords`;
-            }}
-          />
-          <Separator />
-          <SectionBase<Language>
-            id="languages"
-            title={(item) => item.name}
-            description={(item) => item.description}
-          />
-          <Separator />
-          <SectionBase<Award>
-            id="awards"
-            title={(item) => item.title}
-            description={(item) => item.awarder}
-          />
-          <Separator />
-          <SectionBase<Certification>
-            id="certifications"
-            title={(item) => item.name}
-            description={(item) => item.issuer}
-          />
-          <Separator />
-          <SectionBase<Interest>
-            id="interests"
-            title={(item) => item.name}
-            description={(item) => {
-              if (item.keywords.length > 0) return `${item.keywords.length} keywords`;
-            }}
-          />
-          <Separator />
-          <SectionBase<Project>
-            id="projects"
-            title={(item) => item.name}
-            description={(item) => item.description}
-          />
-          <Separator />
-          <SectionBase<Publication>
-            id="publications"
-            title={(item) => item.name}
-            description={(item) => item.publisher}
-          />
-          <Separator />
-          <SectionBase<Volunteer>
-            id="volunteer"
-            title={(item) => item.organization}
-            description={(item) => item.position}
-          />
-          <Separator />
-          <SectionBase<Reference>
-            id="references"
-            title={(item) => item.name}
-            description={(item) => item.description}
-          />
-
-          {/* Custom Sections */}
-          {Object.values(customSections).map((section) => (
-            <Fragment key={section.id}>
-              <Separator />
-
-              <SectionBase<CustomSection>
-                id={`custom.${section.id}`}
-                title={(item) => item.name}
-                description={(item) => item.description}
-              />
-            </Fragment>
-          ))}
+          {renderSections()}
 
           <Separator />
 

@@ -9,7 +9,12 @@ import { getSectionIcon } from "../shared/section-icon";
 
 export const TemplateSection = () => {
   const setValue = useResumeStore((state) => state.setValue);
-  const currentTemplate = useResumeStore((state) => state.resume.data.metadata.template);
+  const { type, data } = useResumeStore((state) => state.resume);
+  const currentTemplate = data.metadata.template;
+
+  const templates = templatesList.filter((template) => 
+    type === 'resume' ? !template.startsWith('cl-') : template.startsWith('cl-')
+  );
 
   return (
     <section id="template" className="grid gap-y-6">
@@ -21,7 +26,7 @@ export const TemplateSection = () => {
       </header>
 
       <main className="grid grid-cols-2 gap-5 @lg/right:grid-cols-3 @2xl/right:grid-cols-4">
-        {templatesList.map((template, index) => (
+        {templates.map((template, index) => (
           <AspectRatio key={template} ratio={1 / 1.4142}>
             <motion.div
               initial={{ opacity: 0 }}
@@ -39,7 +44,7 @@ export const TemplateSection = () => {
 
               <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
                 <p className="absolute inset-x-0 bottom-2 text-center font-bold capitalize text-primary">
-                  {template}
+                  {template.replace('cl-', '')}
                 </p>
               </div>
             </motion.div>
