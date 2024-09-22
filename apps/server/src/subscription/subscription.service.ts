@@ -47,7 +47,7 @@ export class SubscriptionService {
         description: createPlanDto.description ?? "",
         status: createPlanDto.status,
         duration: createPlanDto.duration,
-        days: createPlanDto.days,
+        days: createPlanDto.duration == "days" ? createPlanDto.days : 1,
         trialPeriod: createPlanDto.trialPeriod,
         priceId: price.id,
       },

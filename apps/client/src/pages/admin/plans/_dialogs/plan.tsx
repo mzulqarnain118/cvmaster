@@ -29,9 +29,16 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Checkbox,
+  Label,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectItem,
+  SelectContent,
 } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -41,6 +48,8 @@ import { useDialog } from "@/client/stores/dialog";
 const formSchema = createPlanSchema.extend({ id: idSchema.optional() });
 
 type FormValues = z.infer<typeof formSchema>;
+
+type Duration = "month" | "quarterly" | "sixMonths" | "year" | "days";
 
 export const PlanDialog = () => {
   const { isOpen, mode, payload, close } = useDialog<PlanDto>("plan");
@@ -53,6 +62,8 @@ export const PlanDialog = () => {
   const { updatePlan, loading: updateLoading } = useUpdatePlan();
   const { deletePlan, loading: deleteLoading } = useDeletePlan();
 
+  const [showDays, setShowDays] = useState(false);
+
   const loading = createLoading || updateLoading || deleteLoading;
 
   const form = useForm<FormValues>({
@@ -64,7 +75,7 @@ export const PlanDialog = () => {
       description: "",
       status: true,
       duration: "month",
-      days: 0,
+      days: 1,
       trialPeriod: 0,
     },
   });
@@ -72,6 +83,12 @@ export const PlanDialog = () => {
   useEffect(() => {
     if (isOpen) onReset();
   }, [isOpen, payload]);
+
+  const onDelete = async () => {
+    if (!payload.item?.id) return;
+    await deletePlan({ id: payload.item.id });
+    close();
+  };
 
   const onSubmit = async (values: FormValues) => {
     if (isCreate) {
@@ -90,21 +107,23 @@ export const PlanDialog = () => {
     if (isUpdate) {
       if (!payload.item?.id) return;
       await updatePlan({
-        ...payload.item,
+        id: payload.item.id,
         name: values.name,
+        price: values.price,
+        currency: values.currency,
+        description: values.description,
+        status: values.status,
+        duration: values.duration,
+        days: values.days,
+        trialPeriod: values.trialPeriod,
       });
-    }
-
-    if (isDelete) {
-      if (!payload.item?.id) return;
-      await deletePlan({ id: payload.item.id });
     }
 
     close();
   };
 
   const onReset = () => {
-    if (isCreate)
+    if (isCreate) {
       form.reset({
         name: "",
         price: 0,
@@ -112,47 +131,53 @@ export const PlanDialog = () => {
         description: "",
         status: true,
         duration: "month",
-        days: 0,
+        days: 1,
         trialPeriod: 0,
       });
+      setShowDays(false);
+    }
 
-    if (isUpdate)
+    if (isUpdate) {
       form.reset({
         id: payload.item?.id,
         name: payload.item?.name,
-        price: payload.item?.price,
+        price: payload.item?.price ? parseFloat(payload.item?.price) : 0,
         currency: payload.item?.currency,
         description: payload.item?.description,
         status: payload.item?.status,
         duration: payload.item?.duration,
-        days: payload.item?.days,
-        trialPeriod: payload.item?.trialPeriod,
+        days: payload.item?.days ? parseInt(payload.item?.days) : 1,
+        trialPeriod: payload.item?.trialPeriod ? parseInt(payload.item?.trialPeriod) : 0,
       });
+      setShowDays(payload.item?.duration == "days");
+    }
 
     if (isDelete) form.reset({ id: payload.item?.id });
+  };
+
+  const onDurationChange = (value: Duration) => {
+    if (value != "days") form.setValue("days", 1);
+    form.setValue("duration", value);
+    setShowDays(value == "days");
   };
 
   if (isDelete) {
     return (
       <AlertDialog open={isOpen} onOpenChange={close}>
         <AlertDialogContent>
-          <Form {...form}>
-            <form>
-              <AlertDialogHeader>
-                <AlertDialogTitle>{`Are you sure you want to delete this plan?`}</AlertDialogTitle>
-                <AlertDialogDescription>
-                  {`This action cannot be undone. This will permanently delete the plan and cannot be recovered.`}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{`Are you sure you want to delete this plan?`}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {`This action cannot be undone. This will permanently delete the plan and cannot be recovered.`}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
 
-              <AlertDialogFooter>
-                <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
-                <AlertDialogAction variant="error" onClick={form.handleSubmit(onSubmit)}>
-                  {t`Delete`}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </form>
-          </Form>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t`Cancel`}</AlertDialogCancel>
+            <AlertDialogAction variant="error" onClick={onDelete}>
+              {t`Delete`}
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     );
@@ -180,10 +205,164 @@ export const PlanDialog = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{`Name`}</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <div className="flex items-center justify-between gap-x-2">
                       <Input {...field} className="flex-1" />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="price"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Input
+                        {...field}
+                        type="number"
+                        className="flex-1"
+                        onChange={(e) =>
+                          form.setValue(
+                            "price",
+                            e.currentTarget.value
+                              ? parseFloat(e.currentTarget.value)
+                              : ("" as unknown as number),
+                          )
+                        }
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="description"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Input {...field} className="flex-1" />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="duration"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Duration</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Select
+                        value={field.value}
+                        onValueChange={(value: Duration) => onDurationChange(value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t`Format`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="month">Monthly</SelectItem>
+                          <SelectItem value="quarterly">Every 3 months</SelectItem>
+                          <SelectItem value="sixMonths">Every 6 months</SelectItem>
+                          <SelectItem value="year">Yearly</SelectItem>
+                          <SelectItem value="days">Day(s)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {showDays && (
+              <FormField
+                name="days"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Days</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center justify-between gap-x-2">
+                        <Input
+                          {...field}
+                          type="number"
+                          className="flex-1"
+                          onChange={(e) =>
+                            form.setValue(
+                              "days",
+                              e.currentTarget.value
+                                ? parseInt(e.currentTarget.value)
+                                : ("" as unknown as number),
+                            )
+                          }
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <FormField
+              name="trialPeriod"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Trial Period</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Input
+                        {...field}
+                        type="number"
+                        className="flex-1"
+                        onChange={(e) =>
+                          form.setValue(
+                            "trialPeriod",
+                            e.currentTarget.value
+                              ? parseInt(e.currentTarget.value)
+                              : ("" as unknown as number),
+                          )
+                        }
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              name="status"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Checkbox
+                        id="plan.status"
+                        checked={field.value}
+                        onCheckedChange={(checked) => {
+                          form.setValue("status", checked as boolean);
+                        }}
+                      />
                     </div>
                   </FormControl>
                   <FormMessage />

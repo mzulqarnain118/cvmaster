@@ -12,11 +12,13 @@ const BaseCard = ({
   className,
   onClick,
   isPopular,
+  trialDays,
 }: {
   children?: React.ReactNode;
   className?: string;
   onClick?: () => void;
   isPopular?: boolean;
+  trialDays?: number;
 }) => (
   <Tilt {...defaultTiltProps}>
     <Card
@@ -26,11 +28,18 @@ const BaseCard = ({
       )}
       onClick={onClick}
     >
+      {trialDays != undefined && trialDays > 0 && (
+        <div className="absolute top-0 left-0 bg-accent text-accent-foreground px-2 py-1 text-xs font-semibold rounded-bl-md">
+          {trialDays} day(s) trial
+        </div>
+      )}
+
       {isPopular && (
         <div className="absolute top-0 right-0 bg-accent text-accent-foreground px-2 py-1 text-xs font-semibold rounded-bl-md">
           Popular
         </div>
       )}
+
       {children}
     </Card>
   </Tilt>
@@ -47,6 +56,8 @@ export const PlanCards = ({
 }) => {
   const { plans, loading } = usePlans();
 
+  const data = plans?.filter((item) => item.status == true);
+
   return (
     <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
       {loading &&
@@ -60,9 +71,9 @@ export const PlanCards = ({
           </div>
         ))}
 
-      {plans && (
+      {data && (
         <AnimatePresence>
-          {plans.map((plan, index) => (
+          {data.map((plan, index) => (
             <motion.div
               key={index}
               layout
@@ -72,13 +83,28 @@ export const PlanCards = ({
             >
               <ContextMenu>
                 <ContextMenuTrigger>
-                  <BaseCard className="space-y-0" isPopular={index === 1}>
+                  <BaseCard
+                    className="space-y-0"
+                    isPopular={index === 1}
+                    trialDays={plan.trialPeriod}
+                  >
                     <div className="p-6 text-center">
                       <h3 className="text-2xl font-bold mb-2">{plan.name || ""}</h3>
                       <p className="text-3xl font-extrabold mb-4">
                         ${plan.price ?? 0}
                         <span className="text-sm font-normal">
-                          / {plan.duration === "days" ? plan.days : ""} {plan.duration}
+                          /
+                          {plan.duration == "month"
+                            ? "Monthly"
+                            : plan.duration == "quarterly"
+                              ? "Every 3 months"
+                              : plan.duration == "sixMonths"
+                                ? "Every 6 months"
+                                : plan.duration == "year"
+                                  ? "Yearly"
+                                  : plan.duration == "days"
+                                    ? `Every ${plan.days} day(s)`
+                                    : plan.duration}
                         </span>
                       </p>
                       <ul className="text-sm mb-6">

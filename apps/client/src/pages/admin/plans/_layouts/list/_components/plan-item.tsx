@@ -75,7 +75,9 @@ export const PlanListItem = ({ plan }: Props) => {
           className="group"
           name={plan.name}
           price={plan.price}
+          currency={plan.currency}
           duration={plan.duration}
+          days={plan.days}
           status={plan.status === true ? "Active" : "In-active"}
           description={t`Last updated ${lastUpdated}`}
           end={dropdownMenu}

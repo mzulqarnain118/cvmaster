@@ -8,7 +8,7 @@ export const createPlanSchema = z.object({
   description: z.string().default(""),
   status: z.boolean().default(true),
   duration: z.enum(["month", "quarterly", "sixMonths", "year", "days"]).default("month"),
-  days: z.number().default(0),
+  days: z.number().min(1).default(1),
   trialPeriod: z.number().default(0),
 });
 
