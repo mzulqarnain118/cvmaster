@@ -12,6 +12,13 @@ export class UserService {
     private readonly storageService: StorageService,
   ) {}
 
+  async findAllUsers() {
+    return this.prisma.user.findMany({
+      where: { role: "user" },
+      orderBy: { updatedAt: "desc" },
+    });
+  }
+
   async findOneById(id: string) {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { id },

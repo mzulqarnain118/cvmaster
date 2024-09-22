@@ -1,5 +1,6 @@
 import { QueryKey } from "@tanstack/react-query";
 
+export const USERS_KEY: QueryKey = ["users"];
 export const USER_KEY: QueryKey = ["user"];
 export const AUTH_PROVIDERS_KEY: QueryKey = ["auth", "providers"];
 

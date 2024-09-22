@@ -32,6 +32,22 @@ export class UserController {
     private readonly subscriptionService: SubscriptionService,
   ) {}
 
+  @Get()
+  @UseGuards(TwoFactorGuard)
+  async findAllUsers() {
+    const usersList = (await this.userService.findAllUsers()) as UserDto[];
+
+    for await (const user of usersList) {
+      user.isSubscriptionActive = user.subscriptionId
+        ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
+        : false;
+    }
+
+    return usersList;
+  }
+
+  // Me
+
   @Get("me")
   @UseGuards(TwoFactorGuard)
   async fetch(@User() user: UserDto) {
