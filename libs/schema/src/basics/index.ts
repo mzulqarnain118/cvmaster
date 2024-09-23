@@ -50,4 +50,24 @@ export const defaultBasics: Basics = {
   },
 };
 
+export const recipientSchema = z.object({
+  recipient: z.string().optional(),
+  date: z.string().optional(),
+  greeting: z.string().optional(),
+  subject: z.string().optional(),
+  name: z.string().optional(),
+  email: z.literal("").or(z.string().email()).optional(),
+});
+
+export type Recipient = z.infer<typeof recipientSchema>;
+
+export const defaultRecipient: Recipient = {
+  recipient: "",
+  date: "",
+  greeting: "",
+  subject: "",
+  name: "",
+  email: "",
+};
+
 export * from "./custom";

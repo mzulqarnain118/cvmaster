@@ -58,7 +58,6 @@ export class JsonResumeParser implements Parser<Json, JsonResume> {
 
   convert(data: JsonResume) {
     const result = JSON.parse(JSON.stringify(defaultResumeData));
-
     // Basics
     result.basics.name = data.basics?.name ?? "";
     result.basics.headline = data.basics?.label ?? "";
@@ -68,6 +67,14 @@ export class JsonResumeParser implements Parser<Json, JsonResume> {
     result.basics.location = data.basics?.location?.address ?? "";
     result.basics.url.href = data.basics?.url ?? "";
     result.sections.summary.content = data.basics?.summary ?? "";
+
+    // Recipient
+    result.recipient.recipient = data?.recipient?.recipient ?? "";
+    result.recipient.date = data?.recipient?.date ?? "";
+    result.recipient.greeting = data?.recipient?.greeting ?? "";
+    result.recipient.subject = data?.recipient?.subject ?? "";
+    result.recipient.name = data?.recipient?.name ?? "";
+    result.recipient.email = data?.recipient?.email ?? "";
 
     // Profiles
     if (data.basics?.profiles) {

@@ -12,10 +12,11 @@ import { URLInput } from "./shared/url-input";
 export const BasicsSection = () => {
   const setValue = useResumeStore((state) => state.setValue);
   const basics = useResumeStore((state) => state.resume.data.basics);
+  const type = useResumeStore((state) => state.resume.type);
 
   return (
     <section id="basics" className="grid gap-y-6">
-      <header className="flex items-center justify-between">
+     <header className="flex items-center justify-between">
         <div className="flex items-center gap-x-4">
           {getSectionIcon("basics")}
           <h2 className="line-clamp-1 text-3xl font-bold">{t`Basics`}</h2>
@@ -23,9 +24,9 @@ export const BasicsSection = () => {
       </header>
 
       <main className="grid gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
+      { type !== 'coverLetter' &&    <div className="sm:col-span-2">
           <PictureSection />
-        </div>
+        </div>}
 
         <div className="space-y-1.5 sm:col-span-2">
           <Label htmlFor="basics.name">{t`Full Name`}</Label>

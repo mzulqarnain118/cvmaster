@@ -24,6 +24,14 @@ export const sampleResume: ResumeData = {
       },
     },
   },
+  recipient: {
+    recipient: "John Doe",
+    date: "2024-01-01",
+    greeting: "Dear Hiring Manager,",
+    subject: "Application for Web Developer Position",
+    name: "John Doe",
+    email: "john.doe@gmail.com",
+  },
   sections: {
     summary: {
       name: "Summary",
