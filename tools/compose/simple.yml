@@ -53,7 +53,7 @@ services:
     networks:
       - cv-network
   app:
-    image: registry-gitlab.softech.co.uk/cv_master/cv_backend:v10
+    image: registry-gitlab.softech.co.uk/cv_master/cv_backend:v13
     restart: unless-stopped
     ports:
       - "3000:3000"

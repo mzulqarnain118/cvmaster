@@ -175,6 +175,18 @@ const certificationSchema = z
   })
   .nullable();
 
+const recipientSchema = z
+  .object({
+    name: z.string().optional(),
+    email: z.string().optional(),
+    company: z.string().optional(),
+    position: z.string().optional(),
+    subject: z.string().optional(),
+    greeting: z.string().optional(),
+    date: z.string().optional(),
+  })
+  .nullable();
+
 const metadataSchema = z
   .object({
     css: z.object({ value: z.string().optional(), visible: z.boolean() }).optional(),
@@ -205,6 +217,7 @@ const metadataSchema = z
 export const reactiveResumeV3Schema = z.object({
   public: z.boolean(),
   basics: basicsSchema,
+  recipient: recipientSchema,
   sections: z.object({
     work: sectionSchema.extend({ items: z.array(workSchema) }).optional(),
     awards: sectionSchema.extend({ items: z.array(awardSchema) }).optional(),

@@ -28,6 +28,7 @@ import { BasicsSection } from "./sections/basics";
 import { SectionBase } from "./sections/shared/section-base";
 import { SectionIcon } from "./sections/shared/section-icon";
 import { SummarySection } from "./sections/summary";
+import { RecipientSection } from "./sections/recipient";
 
 export const LeftSidebar = () => {
   const containterRef = useRef<HTMLDivElement | null>(null);
@@ -47,19 +48,22 @@ export const LeftSidebar = () => {
         <>
           <BasicsSection />
           <Separator />
+          <RecipientSection />
+          <Separator />
           <SummarySection />
           <Separator />
-          <SectionBase<Profile>
-            id="profiles"
-            title={(item) => item.network}
-            description={(item) => item.username}
-          />
-          <Separator />
-          <SectionBase
-            id="coverLetter"
-            title={() => t`Cover Letter`}
-            description={() => t`Your cover letter content`}
-          />
+      {/* Custom Sections */}
+      {Object.values(customSections).map((section) => (
+          <Fragment key={section.id}>
+            <Separator />
+
+            <SectionBase<CustomSection>
+              id={`custom.${section.id}`}
+              title={(item) => item.name}
+              description={(item) => item.description}
+            />
+            </Fragment>
+          ))}
         </>
       );
     }
@@ -177,22 +181,19 @@ export const LeftSidebar = () => {
             <>
               <SectionIcon
                 id="basics"
-                name={t`Basics`}
+                name={`Basics`}
                 onClick={() => scrollIntoView("#basics")}
+              />
+              <SectionIcon
+                id="recipient"
+                name={`Recipient`}
+                onClick={() => scrollIntoView("#recipient")}
               />
               <SectionIcon
                 id="summary"
                 onClick={() => scrollIntoView("#summary")}
               />
-              <SectionIcon
-                id="profiles"
-                onClick={() => scrollIntoView("#profiles")}
-              />
-              <SectionIcon
-                id="coverLetter"
-                name={t`Cover Letter`}
-                onClick={() => scrollIntoView("#coverLetter")}
-              />
+          
             </>
           ) : (
             <>
@@ -263,7 +264,7 @@ export const LeftSidebar = () => {
           <SectionIcon
             id="custom"
             variant="outline"
-            name={t`Add a new section`}
+            name={`Add a new section`}
             icon={<Plus size={14} />}
             onClick={() => {
               addSection();
@@ -288,7 +289,7 @@ export const LeftSidebar = () => {
 
           <Button size="lg" variant="outline" onClick={addSection}>
             <PlusCircle />
-            <span className="ml-2">{t`Add a new section`}</span>
+            <span className="ml-2">{`Add a new section`}</span>
           </Button>
         </div>
       </ScrollArea>

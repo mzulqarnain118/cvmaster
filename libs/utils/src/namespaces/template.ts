@@ -11,16 +11,16 @@ export const templatesList = [
   "onyx",
   "pikachu",
   "rhyhorn",
-  // "cl-azurill",
-  // "cl-bronzor",
-  // "cl-chikorita",
-  // "cl-ditto",
-  // "cl-gengar",
-  // "cl-glalie",
-  // "cl-kakuna",
-  // "cl-leafish",
-  // "cl-nosepass", 
-  
+  "cl-1",
+  "cl-2",
+   "cl-3",
+   "cl-4",
+  //  "cl-5",
+  //  "cl-6",
+  //  "cl-7",
+  //  "cl-8",
+  //  "cl-9",
+  //  "cl-10"
 ] as const;
 
 export type Template = (typeof templatesList)[number];

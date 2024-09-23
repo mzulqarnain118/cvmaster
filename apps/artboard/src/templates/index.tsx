@@ -12,17 +12,28 @@ import { Nosepass } from "./nosepass";
 import { Onyx } from "./onyx";
 import { Pikachu } from "./pikachu";
 import { Rhyhorn } from "./rhyhorn";
+import { CoverLetter1 } from "./cl-1";
+import { CoverLetter4 } from "./cl-4";
+import { CoverLetter2 } from "./cl-2";
+import { CoverLetter3 } from "./cl-3";
 
 export const getTemplate = (template: Template) => {
   switch (template) {
     case "azurill": {
       return Azurill;
     }
+    case "cl-1": {
+      return CoverLetter1;
+    }
+
     case "bronzor": {
       return Bronzor;
     }
     case "chikorita": {
       return Chikorita;
+    }
+    case "cl-4": {
+      return CoverLetter4;
     }
     case "ditto": {
       return Ditto;
@@ -32,6 +43,9 @@ export const getTemplate = (template: Template) => {
     }
     case "glalie": {
       return Glalie;
+    }
+    case "cl-2": {
+      return CoverLetter2;
     }
     case "kakuna": {
       return Kakuna;
@@ -44,6 +58,9 @@ export const getTemplate = (template: Template) => {
     }
     case "onyx": {
       return Onyx;
+    }
+    case "cl-3": {
+      return CoverLetter3;
     }
     case "pikachu": {
       return Pikachu;
