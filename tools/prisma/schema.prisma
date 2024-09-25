@@ -46,6 +46,8 @@ model User {
   emailVerified    Boolean  @default(false)
   twoFactorEnabled Boolean  @default(false)
   subscriptionId   String?  @default("")
+  planId           String?  @default("")
+  trialAvailed     Boolean  @default(false)
   paymentUserId    String?  @default("")
   role             Role     @default(user)
   createdAt        DateTime @default(now())

@@ -24,18 +24,31 @@ export const ListView = () => {
 
       {users && (
         <AnimatePresence>
-          {users
-            .sort((a, b) => sortByDate(a, b, "updatedAt"))
-            .map((user, index) => (
-              <motion.div
-                key={user.id}
-                initial={{ opacity: 0, y: -50 }}
-                animate={{ opacity: 1, y: 0, transition: { delay: (index + 2) * 0.1 } }}
-                exit={{ opacity: 0, filter: "blur(8px)", transition: { duration: 0.5 } }}
-              >
-                <UserListItem user={user} />
-              </motion.div>
-            ))}
+          {
+            <>
+              <BaseListItem
+                className="group"
+                name="NAME"
+                email="EMAIL"
+                subscription="SUBSCRIPTION"
+                plan="PLAN"
+                description="DESCRIPTION"
+              />
+
+              {users
+                .sort((a, b) => sortByDate(a, b, "updatedAt"))
+                .map((user, index) => (
+                  <motion.div
+                    key={user.id}
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0, transition: { delay: (index + 2) * 0.1 } }}
+                    exit={{ opacity: 0, filter: "blur(8px)", transition: { duration: 0.5 } }}
+                  >
+                    <UserListItem user={user} />
+                  </motion.div>
+                ))}
+            </>
+          }
         </AnimatePresence>
       )}
     </div>

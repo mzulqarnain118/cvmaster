@@ -21,7 +21,6 @@ import { TwoFactorGuard } from "../auth/guards/two-factor.guard";
 import { User } from "./decorators/user.decorator";
 import { UserService } from "./user.service";
 import { SubscriptionService } from "../subscription/subscription.service";
-import { subscriptionActive } from "../subscription/utils/helpers";
 
 @ApiTags("User")
 @Controller("user")
@@ -38,9 +37,10 @@ export class UserController {
     const usersList = (await this.userService.findAllUsers()) as UserDto[];
 
     for await (const user of usersList) {
-      user.isSubscriptionActive = user.subscriptionId
-        ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
-        : false;
+      const resp = await this.subscriptionService.userSubscriptionInfo(user);
+      user.isSubscriptionActive = resp.isSubscriptionActive;
+      user.planName = resp.planName;
+      user.subscriptionStatus = resp.subscriptionStatus;
     }
 
     return usersList;
@@ -65,9 +65,10 @@ export class UserController {
         ? true
         : false;
 
-    user.isSubscriptionActive = user.subscriptionId
-      ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
-      : false;
+    const resp = await this.subscriptionService.userSubscriptionInfo(user);
+    user.isSubscriptionActive = resp.isSubscriptionActive;
+    user.planName = resp.planName;
+    user.subscriptionStatus = resp.subscriptionStatus;
 
     return user;
   }
@@ -109,11 +110,10 @@ export class UserController {
           ? true
           : false;
 
-      const isSubscriptionActive = user.subscriptionId
-        ? subscriptionActive(await this.subscriptionService.get(user.subscriptionId))
-        : false;
+      const { isSubscriptionActive, planName, subscriptionStatus } =
+        await this.subscriptionService.userSubscriptionInfo(user);
 
-      return { ...returnUser, isCardAttached, isSubscriptionActive };
+      return { ...returnUser, isCardAttached, isSubscriptionActive, planName, subscriptionStatus };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError && error.code === "P2002") {
         throw new BadRequestException(ErrorMessage.UserAlreadyExists);

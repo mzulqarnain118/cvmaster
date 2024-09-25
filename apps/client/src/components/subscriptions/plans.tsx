@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@reactive-resume/utils";
 import { ContextMenu, ContextMenuTrigger } from "@reactive-resume/ui";
 import { Star, StarHalf } from "@phosphor-icons/react";
+import { useUser } from "@/client/services/user";
 
 const BaseCard = ({
   children,
@@ -50,11 +51,12 @@ export const PlanCards = ({
   subscriptionLoading,
   printLoading,
 }: {
-  onClick: (id: string) => void;
+  onClick: (priceId: string, planId: string) => void;
   subscriptionLoading: boolean;
   printLoading: boolean;
 }) => {
   const { plans, loading } = usePlans();
+  const { user } = useUser();
 
   const data = plans?.filter((item) => item.status == true);
 
@@ -86,7 +88,7 @@ export const PlanCards = ({
                   <BaseCard
                     className="space-y-0"
                     isPopular={index === 1}
-                    trialDays={plan.trialPeriod}
+                    trialDays={user?.trialAvailed ? 0 : plan.trialPeriod}
                   >
                     <div className="p-6 text-center">
                       <h3 className="text-2xl font-bold mb-2">{plan.name || ""}</h3>
@@ -125,7 +127,7 @@ export const PlanCards = ({
                         className="w-full"
                         variant="primary"
                         disabled={subscriptionLoading || printLoading}
-                        onClick={() => onClick(plan.priceId)}
+                        onClick={() => onClick(plan.priceId, plan.id)}
                       >
                         {subscriptionLoading || printLoading ? "Processing..." : "Get Started"}
                       </Button>

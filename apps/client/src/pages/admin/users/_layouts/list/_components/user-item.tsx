@@ -18,7 +18,8 @@ export const UserListItem = ({ user }: Props) => {
           className="group"
           name={user.name}
           email={user.email}
-          isSubscriptionActive={user.isSubscriptionActive}
+          subscription={user.subscriptionStatus}
+          plan={user.planName}
           description={t`Last updated ${lastUpdated}`}
         />
       </ContextMenuTrigger>

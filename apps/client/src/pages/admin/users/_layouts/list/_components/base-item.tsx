@@ -3,8 +3,9 @@ import { cn } from "@reactive-resume/utils";
 type Props = {
   name?: React.ReactNode;
   email?: React.ReactNode;
-  isSubscriptionActive?: React.ReactNode;
+  subscription?: React.ReactNode;
   description?: React.ReactNode;
+  plan?: React.ReactNode;
   start?: React.ReactNode;
   end?: React.ReactNode;
   className?: string;
@@ -14,7 +15,8 @@ type Props = {
 export const BaseListItem = ({
   name,
   email,
-  isSubscriptionActive,
+  subscription,
+  plan,
   description,
   start,
   end,
@@ -31,11 +33,10 @@ export const BaseListItem = ({
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center space-x-4">
         <div className="flex size-5 items-center justify-center">{start}</div>
-        <h4 className="w-[220px] truncate font-medium lg:w-[320px]">{name}</h4>
+        <h4 className="w-[220px] truncate font-medium lg:w-[150px]">{name}</h4>
         <p className="hidden text-xs opacity-75 sm:block w-[130px]">{email}</p>
-        <p className="hidden text-xs opacity-75 sm:block w-[130px]">
-          {isSubscriptionActive == true ? "Subscription Active" : "Subscription In-active"}
-        </p>
+        <p className="hidden text-xs opacity-75 sm:block w-[200px]">{subscription}</p>
+        <p className="hidden text-xs opacity-75 sm:block w-[150px]">{plan}</p>
         <p className="hidden text-xs opacity-75 sm:block w-[185px]">{description}</p>
       </div>
 

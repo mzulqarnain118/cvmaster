@@ -30,7 +30,13 @@ export class SubscriptionController {
   @UseGuards(TwoFactorGuard)
   async create(@User() user: UserEntity, @Body() body: any) {
     try {
-      await this.subscriptionService.create(user.paymentUserId as string, user.email, body.id);
+      await this.subscriptionService.create(
+        user.paymentUserId as string,
+        user.email,
+        user.trialAvailed,
+        body.priceId,
+        body.planId,
+      );
       return true;
     } catch (error) {
       Logger.error(error);

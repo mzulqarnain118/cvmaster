@@ -7,8 +7,13 @@ import {
 import Stripe from "stripe";
 import { InjectStripeClient } from "@golevelup/nestjs-stripe";
 import { PrismaService } from "nestjs-prisma";
-import { CreatePlanDto, UpdatePlanDto } from "@reactive-resume/dto";
-import { amountToCents, getRecurring } from "./utils/helpers";
+import { CreatePlanDto, UpdatePlanDto, UserDto } from "@reactive-resume/dto";
+import {
+  amountToCents,
+  getRecurring,
+  subscriptionActive,
+  subscriptionStatusLabel,
+} from "./utils/helpers";
 import { Duration, PRODUCT_ID, SUBSCRIPTION_STATUS } from "./utils/constants";
 import { ErrorMessage } from "@reactive-resume/utils";
 
@@ -189,11 +194,23 @@ export class SubscriptionService {
       throw new InternalServerErrorException(error);
     }
   }
-  async create(customerId: string, email: string, priceId: string) {
+  async create(
+    customerId: string,
+    email: string,
+    trialAvailed: boolean,
+    priceId: string,
+    planId: string,
+  ) {
     try {
+      const planDetails = await this.prisma.plans.findUniqueOrThrow({
+        where: { id: planId, deleted: false },
+      });
+
+      const trial_period_days = trialAvailed ? 0 : planDetails.trialPeriod ?? 0;
       const sourceData = await this.stripe.subscriptions.create({
         customer: customerId,
         items: [{ price: priceId }],
+        trial_period_days,
       });
 
       // First payment error
@@ -205,12 +222,38 @@ export class SubscriptionService {
       // update user
       await this.prisma.user.update({
         where: { email },
-        data: { subscriptionId: sourceData.id },
+        data: {
+          subscriptionId: sourceData.id,
+          planId,
+          trialAvailed: trial_period_days > 0,
+        },
       });
 
       return sourceData;
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
+  }
+
+  // helpers
+  async userSubscriptionInfo(user: UserDto) {
+    const response = {
+      isSubscriptionActive: false,
+      planName: "",
+      subscriptionStatus: "In-active",
+    };
+
+    if (user.subscriptionId) {
+      const subscription = await this.get(user.subscriptionId);
+      response.isSubscriptionActive = subscriptionActive(subscription);
+      response.subscriptionStatus = subscriptionStatusLabel(subscription);
+    }
+
+    if (user.planId) {
+      const plan = await this.prisma.plans.findUniqueOrThrow({ where: { id: user.planId } });
+      response.planName = plan.name;
+    }
+
+    return response;
   }
 }

@@ -8,8 +8,8 @@ import { printResume } from "../resume";
 import { useResumeStore } from "@/client/stores/resume";
 import { openInNewTab } from "@reactive-resume/utils";
 
-export const createSubscription = async (id: string) => {
-  const response = await axios.post("/subscription", { id });
+export const createSubscription = async (payload: any) => {
+  const response = await axios.post("/subscription", payload);
   return response.data;
 };
 
@@ -31,9 +31,9 @@ export const useCreateSubscription = () => {
         title: `Subscription Activated`,
         description: `Thanks for the payment. Your resume has been downloaded in PDF format successfully.`,
       });
-      const {url} = await printResume({id:resumeId})
+      const { url } = await printResume({ id: resumeId });
 
-      openInNewTab(url)
+      openInNewTab(url);
       return data;
     },
   });

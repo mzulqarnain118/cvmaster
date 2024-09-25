@@ -12,12 +12,10 @@ import { useDialog } from "@/client/stores/dialog";
 import { PlanCards } from "../plans";
 import { Payment } from "../payment";
 import { useEffect, useState } from "react";
-import { useUpdateUser, useUser } from "@/client/services/user";
+import { useUser } from "@/client/services/user";
 import { useCreateSubscription } from "@/client/services/subscription";
 import { usePrintResume } from "@/client/services/resume";
 import { openInNewTab } from "@reactive-resume/utils";
-
-
 
 export const SubscribeDialog = () => {
   const { createSubscription, loading: subscriptionLoading } = useCreateSubscription();
@@ -26,26 +24,29 @@ export const SubscribeDialog = () => {
   const { isOpen, close, payload } = useDialog("subscription");
 
   const [step, setStep] = useState<number>(1);
-  const [selected, setSelected] = useState<string>("");
+  const [selectedPriceId, setSelectedPriceId] = useState<string>("");
+  const [selectedPlanId, setSelectedPlanId] = useState<string>("");
 
-  const purchaseSubscription = async (id: string) => {
+  const purchaseSubscription = async (priceId: string, planId: string) => {
     if (user?.isSubscriptionActive) {
       const { url } = await printResume({ id: payload.resumeId });
       openInNewTab(url);
     } else {
-      await createSubscription(id);
+      await createSubscription({ priceId, planId });
       close();
     }
   };
 
-  const onPlanSelect = (id: string) => {
-    setSelected(id);
-    if (user?.isCardAttached) purchaseSubscription(id);
+  const onPlanSelect = (priceId: string, planId: string) => {
+    setSelectedPriceId(priceId);
+    setSelectedPlanId(planId);
+    if (user?.isCardAttached) purchaseSubscription(priceId, planId);
     else setStep(2);
   };
 
   const reset = () => {
-    setSelected("");
+    setSelectedPriceId("");
+    setSelectedPlanId("");
     setStep(1);
   };
 
@@ -69,7 +70,7 @@ export const SubscribeDialog = () => {
         )}
         {step == 2 && (
           <Payment
-            onSuccess={() => purchaseSubscription(selected)}
+            onSuccess={() => purchaseSubscription(selectedPriceId, selectedPlanId)}
             subscriptionLoading={subscriptionLoading}
             printLoading={printLoading}
           />
