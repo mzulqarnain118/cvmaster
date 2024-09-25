@@ -112,7 +112,7 @@ const Section = ({ id, isDragging = false }: SectionProps) => {
 };
 
 export const LayoutSection = () => {
-  const setValue = useResumeStore((state) => state.setValue);
+  const {setValue,resume} = useResumeStore((state) => state);
   const layout = useResumeStore((state) => state.resume.data.metadata.layout);
 
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -223,11 +223,11 @@ export const LayoutSection = () => {
           onDragStart={onDragStart}
           onDragCancel={onDragCancel}
         >
-          {layout.map((page, pageIndex) => {
+          {layout?.map((page, pageIndex) =>  {
             const mainIndex = `${pageIndex}.0`;
             const sidebarIndex = `${pageIndex}.1`;
 
-            const main = page[0];
+            const main = resume?.type === 'coverLetter' ? page[0]?.slice(0, 2) : page[0];
             const sidebar = page[1];
 
             return (
@@ -255,7 +255,7 @@ export const LayoutSection = () => {
 
                 <div className="grid grid-cols-2 items-start gap-x-4">
                   <Column id={mainIndex} name={t`Main`} items={main} />
-                  <Column id={sidebarIndex} name={t`Sidebar`} items={sidebar} />
+                 {resume?.type !== 'coverLetter' && <Column id={sidebarIndex} name={t`Sidebar`} items={sidebar} />}
                 </div>
               </div>
             );

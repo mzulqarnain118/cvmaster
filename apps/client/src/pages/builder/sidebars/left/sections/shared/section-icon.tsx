@@ -14,6 +14,7 @@ import {
   Translate,
   User,
   Users,
+  UserCircleCheck,
 } from "@phosphor-icons/react";
 import { defaultSection, SectionKey, SectionWithItem } from "@reactive-resume/schema";
 import { Button, ButtonProps, Tooltip } from "@reactive-resume/ui";
@@ -26,6 +27,9 @@ export const getSectionIcon = (id: SectionKey, props: IconProps = {}) => {
     // Left Sidebar
     case "basics": {
       return <User size={18} {...props} />;
+    }
+    case "recipient": {
+      return <UserCircleCheck size={18} {...props} />;
     }
     case "summary": {
       return <Article size={18} {...props} />;

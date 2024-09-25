@@ -106,6 +106,15 @@ const referencesSchema = z.object({
   reference: z.string().optional(),
 });
 
+const recipientSchema = z.object({
+  recipient: z.string().optional(),
+  date: iso8601.optional(),
+  greeting: z.string().optional(),
+  subject: z.string().optional(),
+  name: z.string().optional(),
+  email: z.literal("").or(z.string().email()).optional(),
+});
+
 export const jsonResumeSchema = z.object({
   basics: basicsSchema.optional(),
   work: z.array(workSchema).optional(),
@@ -118,6 +127,7 @@ export const jsonResumeSchema = z.object({
   languages: z.array(languagesSchema).optional(),
   interests: z.array(interestsSchema).optional(),
   references: z.array(referencesSchema).optional(),
+  recipient: recipientSchema.optional(),
 });
 
 export type JsonResume = z.infer<typeof jsonResumeSchema>;

@@ -22,6 +22,12 @@
       }
     }
   },
+  "recipient": {
+    "name": "John Doe",
+    "email": "john.doe@gmail.com",
+    "subject": "Job Application",
+    "date": "2024-01-01"
+  },
   "sections": {
     "summary": {
       "name": "Summary",
