@@ -25,7 +25,6 @@ export const sampleResume: ResumeData = {
     },
   },
   recipient: {
-    recipient: "John Doe",
     date: "2024-01-01",
     greeting: "Dear Hiring Manager,",
     subject: "Application for Web Developer Position",
@@ -33,6 +32,22 @@ export const sampleResume: ResumeData = {
     email: "john.doe@gmail.com",
   },
   sections: {
+    // recipient: {
+    //   name: "Recipient",
+    //   columns: 1,
+    //   separateLinks: true,
+    //   visible: true,
+    //   id: "recipient",
+    //   items: [
+    //     {
+    //       name: "John Doe",
+    //       date: "2024-01-01",
+    //       greeting: "Dear Hiring Manager,",
+    //       subject: "Application for Web Developer Position",
+    //       email: "john.doe@gmail.com",
+    //     },
+    //   ],
+    // },
     summary: {
       name: "Summary",
       columns: 1,
@@ -302,7 +317,7 @@ export const sampleResume: ResumeData = {
     template: "glalie",
     layout: [
       [
-        ["summary", "experience", "education", "projects", "references"],
+        ["recipient", "summary", "experience", "education", "projects", "references"],
         [
           "profiles",
           "skills",

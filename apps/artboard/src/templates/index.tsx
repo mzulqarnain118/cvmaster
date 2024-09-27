@@ -32,9 +32,9 @@ export const getTemplate = (template: Template) => {
     case "chikorita": {
       return Chikorita;
     }
-    case "cl-4": {
-      return CoverLetter4;
-    }
+    // case "cl-4": {
+    //   return CoverLetter4;
+    // }
     case "ditto": {
       return Ditto;
     }
@@ -47,7 +47,8 @@ export const getTemplate = (template: Template) => {
     case "cl-2": {
       return CoverLetter2;
     }
-    case "kakuna": {
+    case "kakuna":
+    case "cl-3": {
       return Kakuna;
     }
     case "leafish": {
@@ -62,7 +63,8 @@ export const getTemplate = (template: Template) => {
     case "cl-3": {
       return CoverLetter3;
     }
-    case "pikachu": {
+    case "pikachu":
+    case "cl-4": {
       return Pikachu;
     }
     case "rhyhorn": {

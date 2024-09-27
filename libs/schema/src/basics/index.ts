@@ -51,7 +51,6 @@ export const defaultBasics: Basics = {
 };
 
 export const recipientSchema = z.object({
-  recipient: z.string().optional(),
   date: z.string().optional(),
   greeting: z.string().optional(),
   subject: z.string().optional(),
@@ -62,7 +61,6 @@ export const recipientSchema = z.object({
 export type Recipient = z.infer<typeof recipientSchema>;
 
 export const defaultRecipient: Recipient = {
-  recipient: "",
   date: "",
   greeting: "",
   subject: "",
