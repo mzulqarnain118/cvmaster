@@ -320,7 +320,7 @@ export const PlanDialog = () => {
               />
             )}
 
-            <FormField
+            {/* <FormField
               name="trialPeriod"
               control={form.control}
               render={({ field }) => (
@@ -346,7 +346,7 @@ export const PlanDialog = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               name="status"

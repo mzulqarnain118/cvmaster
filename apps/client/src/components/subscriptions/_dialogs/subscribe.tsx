@@ -16,6 +16,7 @@ import { useUser } from "@/client/services/user";
 import { useCreateSubscription } from "@/client/services/subscription";
 import { usePrintResume } from "@/client/services/resume";
 import { openInNewTab } from "@reactive-resume/utils";
+import { PlanDto } from "@reactive-resume/dto";
 
 export const SubscribeDialog = () => {
   const { createSubscription, loading: subscriptionLoading } = useCreateSubscription();
@@ -24,8 +25,7 @@ export const SubscribeDialog = () => {
   const { isOpen, close, payload } = useDialog("subscription");
 
   const [step, setStep] = useState<number>(1);
-  const [selectedPriceId, setSelectedPriceId] = useState<string>("");
-  const [selectedPlanId, setSelectedPlanId] = useState<string>("");
+  const [selectedPlan, setSelectedPlan] = useState<PlanDto | null>(null);
 
   const purchaseSubscription = async (priceId: string, planId: string) => {
     if (user?.isSubscriptionActive) {
@@ -37,16 +37,14 @@ export const SubscribeDialog = () => {
     }
   };
 
-  const onPlanSelect = (priceId: string, planId: string) => {
-    setSelectedPriceId(priceId);
-    setSelectedPlanId(planId);
-    if (user?.isCardAttached) purchaseSubscription(priceId, planId);
+  const onPlanSelect = (plan: PlanDto) => {
+    setSelectedPlan(plan);
+    if (user?.isCardAttached) purchaseSubscription(plan.priceId, plan.id);
     else setStep(2);
   };
 
   const reset = () => {
-    setSelectedPriceId("");
-    setSelectedPlanId("");
+    setSelectedPlan(null);
     setStep(1);
   };
 
@@ -68,9 +66,11 @@ export const SubscribeDialog = () => {
             printLoading={printLoading}
           />
         )}
-        {step == 2 && (
+
+        {step == 2 && selectedPlan != null && (
           <Payment
-            onSuccess={() => purchaseSubscription(selectedPriceId, selectedPlanId)}
+            selectedPlan={selectedPlan}
+            onSuccess={() => purchaseSubscription(selectedPlan.priceId, selectedPlan.id)}
             subscriptionLoading={subscriptionLoading}
             printLoading={printLoading}
           />

@@ -148,19 +148,28 @@ export class SubscriptionService {
   async attachPaymentMethod(paymentMethod: string, customer: string) {
     return await this.stripe.paymentMethods.attach(paymentMethod, { customer });
   }
-  async addCustomerPaymentMethod(customerId: string, source: string, isDefault = true) {
+  async addCustomerPaymentMethod(
+    customerId: string,
+    source: string,
+    type: string,
+    isDefault = true,
+  ) {
     try {
-      // create payment method
-      const paymentMethod = await this.createPaymentMethod({
-        type: "card",
-        "card[token]": source,
-      });
+      let paymentMethod = source;
+      if (type === "card") {
+        // create payment method
+        const cardPaymentMethod = await this.createPaymentMethod({
+          type: "card",
+          "card[token]": source,
+        });
+        paymentMethod = cardPaymentMethod.id;
+      }
 
       // attach to customer
-      await this.attachPaymentMethod(paymentMethod.id, customerId);
+      await this.attachPaymentMethod(paymentMethod, customerId);
       if (isDefault) {
         await this.stripe.customers.update(customerId, {
-          invoice_settings: { default_payment_method: paymentMethod.id },
+          invoice_settings: { default_payment_method: paymentMethod },
         });
       }
 

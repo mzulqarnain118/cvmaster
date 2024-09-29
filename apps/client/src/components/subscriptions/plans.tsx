@@ -7,6 +7,7 @@ import { cn } from "@reactive-resume/utils";
 import { ContextMenu, ContextMenuTrigger } from "@reactive-resume/ui";
 import { Star, StarHalf } from "@phosphor-icons/react";
 import { useUser } from "@/client/services/user";
+import { PlanDto } from "@reactive-resume/dto";
 
 const BaseCard = ({
   children,
@@ -51,7 +52,7 @@ export const PlanCards = ({
   subscriptionLoading,
   printLoading,
 }: {
-  onClick: (priceId: string, planId: string) => void;
+  onClick: (plan: PlanDto) => void;
   subscriptionLoading: boolean;
   printLoading: boolean;
 }) => {
@@ -127,7 +128,7 @@ export const PlanCards = ({
                         className="w-full"
                         variant="primary"
                         disabled={subscriptionLoading || printLoading}
-                        onClick={() => onClick(plan.priceId, plan.id)}
+                        onClick={() => onClick(plan)}
                       >
                         {subscriptionLoading || printLoading ? "Processing..." : "Get Started"}
                       </Button>

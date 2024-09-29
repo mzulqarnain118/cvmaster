@@ -90,6 +90,7 @@ export class SubscriptionController {
       await this.subscriptionService.addCustomerPaymentMethod(
         user.paymentUserId as string,
         body.source,
+        body.type,
       );
 
       return true;

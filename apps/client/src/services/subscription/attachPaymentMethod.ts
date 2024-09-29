@@ -1,8 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { axios } from "@/client/libs/axios";
 
-export const attachPaymentMethod = async (source: string) => {
-  const response = await axios.post("/subscription/payment-method/attach", { source });
+export const attachPaymentMethod = async ({
+  source,
+  type,
+}: {
+  source: string;
+  type: "applePay" | "card";
+}) => {
+  const response = await axios.post("/subscription/payment-method/attach", { source, type });
   return response.data;
 };
 
