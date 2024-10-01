@@ -69,7 +69,6 @@ export class JsonResumeParser implements Parser<Json, JsonResume> {
     result.sections.summary.content = data.basics?.summary ?? "";
 
     // Recipient
-    result.recipient.recipient = data?.recipient?.recipient ?? "";
     result.recipient.date = data?.recipient?.date ?? "";
     result.recipient.greeting = data?.recipient?.greeting ?? "";
     result.recipient.subject = data?.recipient?.subject ?? "";

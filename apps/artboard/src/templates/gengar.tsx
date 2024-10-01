@@ -24,6 +24,7 @@ import { Fragment } from "react";
 import { Picture } from "../components/picture";
 import { useArtboardStore } from "../store/artboard";
 import { TemplateProps } from "../types/template";
+import { Recipient } from "./recipient";
 
 const Header = () => {
   const basics = useArtboardStore((state) => state.resume.basics);
@@ -605,7 +606,10 @@ export const Gengar = ({ columns, isFirstPage = false }: TemplateProps) => {
             className="p-custom space-y-4"
             style={{ backgroundColor: hexToRgb(primaryColor, 0.2) }}
           >
-            <Summary />
+            <>
+              <Recipient />
+              <Summary />
+            </>
           </div>
         )}
 

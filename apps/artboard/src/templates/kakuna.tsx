@@ -532,7 +532,7 @@ export const Kakuna = ({ columns, isFirstPage = false }: TemplateProps) => {
   return (
     <div className="p-custom space-y-4">
       {isFirstPage && <Header />}
-      {isFirstPage && <Recipient />}
+      <Recipient />
 
       <div className="space-y-4">
         {main.map((section) => (

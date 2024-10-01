@@ -22,7 +22,8 @@ export type Template = (typeof templatesList)[number];
 export const CoverLettertemplatesList = [
   "bronzor",
   "chikorita",
-  "kakuna",
+  "gengar",
+  // "kakuna",
   "onyx",
   "rhyhorn",
 ] as const;
