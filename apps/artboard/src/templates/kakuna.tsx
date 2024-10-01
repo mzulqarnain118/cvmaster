@@ -23,6 +23,7 @@ import React, { Fragment } from "react";
 import { Picture } from "../components/picture";
 import { useArtboardStore } from "../store/artboard";
 import { TemplateProps } from "../types/template";
+import { Recipient } from "./recipient";
 
 const Header = () => {
   const basics = useArtboardStore((state) => state.resume.basics);
@@ -531,6 +532,7 @@ export const Kakuna = ({ columns, isFirstPage = false }: TemplateProps) => {
   return (
     <div className="p-custom space-y-4">
       {isFirstPage && <Header />}
+      <Recipient />
 
       <div className="space-y-4">
         {main.map((section) => (

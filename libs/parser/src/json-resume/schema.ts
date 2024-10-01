@@ -107,7 +107,6 @@ const referencesSchema = z.object({
 });
 
 const recipientSchema = z.object({
-  recipient: z.string().optional(),
   date: iso8601.optional(),
   greeting: z.string().optional(),
   subject: z.string().optional(),

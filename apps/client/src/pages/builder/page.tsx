@@ -11,7 +11,6 @@ import { useResumeStore } from "@/client/stores/resume";
 
 export const BuilderPage = () => {
   const frameRef = useBuilderStore((state) => state.frame.ref);
-  console.log("🚀 ~ BuilderPage ~ frameRef:", frameRef)
   const setFrameRef = useBuilderStore((state) => state.frame.setRef);
 
   const resume = useResumeStore((state) => state.resume);

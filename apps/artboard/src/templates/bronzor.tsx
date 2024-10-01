@@ -24,6 +24,7 @@ import { Fragment } from "react";
 import { Picture } from "../components/picture";
 import { useArtboardStore } from "../store/artboard";
 import { TemplateProps } from "../types/template";
+import { Recipient } from "./recipient";
 
 const Header = () => {
   const basics = useArtboardStore((state) => state.resume.basics);
@@ -178,6 +179,7 @@ const Section = <T,>({
   summaryKey,
   keywordsKey,
 }: SectionProps<T>) => {
+  console.log("🚀 ~ section:", section);
   if (!section.visible || section.items.length === 0) return null;
 
   return (
@@ -531,6 +533,9 @@ const mapSectionToComponent = (section: SectionKey) => {
     case "profiles": {
       return <Profiles />;
     }
+    case "recipient": {
+      return <Recipient />;
+    }
     case "summary": {
       return <Summary />;
     }
@@ -581,7 +586,7 @@ export const Bronzor = ({ columns, isFirstPage = false }: TemplateProps) => {
   return (
     <div className="p-custom space-y-4">
       {isFirstPage && <Header />}
-
+      <Recipient />
       <div className="space-y-4">
         {main.map((section) => (
           <Fragment key={section}>{mapSectionToComponent(section)}</Fragment>

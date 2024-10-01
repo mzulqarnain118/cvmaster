@@ -15,6 +15,7 @@ import { publicationSchema } from "./publication";
 import { referenceSchema } from "./reference";
 import { skillSchema } from "./skill";
 import { volunteerSchema } from "./volunteer";
+import { recipientSchema } from "../basics";
 
 // Schema
 export const sectionSchema = z.object({
@@ -31,6 +32,10 @@ export const customSchema = sectionSchema.extend({
 });
 
 export const sectionsSchema = z.object({
+  // recipient: sectionSchema.extend({
+  //   id: z.literal("recipient"),
+  //   items: z.array(recipientSchema),
+  // }),
   summary: sectionSchema.extend({
     id: z.literal("summary"),
     content: z.string().default(""),
@@ -104,6 +109,7 @@ export const defaultSection: Section = {
 };
 
 export const defaultSections: Sections = {
+  // recipient: { ...defaultSection, id: "recipient", name: "Recipient", items: [] },
   summary: { ...defaultSection, id: "summary", name: "Summary", content: "" },
   awards: { ...defaultSection, id: "awards", name: "Awards", items: [] },
   certifications: { ...defaultSection, id: "certifications", name: "Certifications", items: [] },

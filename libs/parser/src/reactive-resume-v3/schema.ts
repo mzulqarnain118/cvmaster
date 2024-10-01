@@ -179,8 +179,6 @@ const recipientSchema = z
   .object({
     name: z.string().optional(),
     email: z.string().optional(),
-    company: z.string().optional(),
-    position: z.string().optional(),
     subject: z.string().optional(),
     greeting: z.string().optional(),
     date: z.string().optional(),
@@ -219,6 +217,7 @@ export const reactiveResumeV3Schema = z.object({
   basics: basicsSchema,
   recipient: recipientSchema,
   sections: z.object({
+    recipient: sectionSchema.extend({ items: z.array(recipientSchema) }).optional(),
     work: sectionSchema.extend({ items: z.array(workSchema) }).optional(),
     awards: sectionSchema.extend({ items: z.array(awardSchema) }).optional(),
     skills: sectionSchema.extend({ items: z.array(skillSchema) }).optional(),

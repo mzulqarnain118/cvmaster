@@ -1,6 +1,6 @@
 import { t } from "@lingui/macro";
 import { AspectRatio } from "@reactive-resume/ui";
-import { cn, templatesList } from "@reactive-resume/utils";
+import { cn, CoverLettertemplatesList, templatesList } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
 
 import { useResumeStore } from "@/client/stores/resume";
@@ -12,9 +12,7 @@ export const TemplateSection = () => {
   const { type, data } = useResumeStore((state) => state.resume);
   const currentTemplate = data.metadata.template;
 
-  const templates = templatesList.filter((template) => 
-    type === 'resume' ? !template.startsWith('cl-') : template.startsWith('cl-')
-  );
+  const templates = type === "resume" ? templatesList : CoverLettertemplatesList;
 
   return (
     <section id="template" className="grid gap-y-6">
@@ -29,7 +27,7 @@ export const TemplateSection = () => {
         {templates.map((template, index) => (
           <AspectRatio key={template} ratio={1 / 1.4142}>
             <motion.div
-              initial={{ opacity: 0 ,scale: 1}}
+              initial={{ opacity: 0, scale: 1 }}
               animate={{ opacity: 1, transition: { delay: index * 0.1 } }}
               whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
               className={cn(
@@ -42,11 +40,15 @@ export const TemplateSection = () => {
               whileHover={{ scale: 1.1 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <img src={`/templates/jpg/${template}.${type === 'resume' ? 'jpg' : 'png'}`} alt={template} className="rounded-sm" />
+              <img
+                src={`/templates/jpg/${template}.${type === "resume" ? "jpg" : "png"}`}
+                alt={template}
+                className="rounded-sm"
+              />
 
               <div className="absolute inset-x-0 bottom-0 h-32 w-full bg-gradient-to-b from-transparent to-background/80">
                 <p className="absolute inset-x-0 bottom-2 text-center font-bold capitalize text-primary">
-                  {template.replace('cl-', '')}
+                  {template.replace("cl-", "")}
                 </p>
               </div>
             </motion.div>

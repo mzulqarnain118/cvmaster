@@ -24,6 +24,7 @@ import { Fragment } from "react";
 import { Picture } from "../components/picture";
 import { useArtboardStore } from "../store/artboard";
 import { TemplateProps } from "../types/template";
+import { Recipient } from "./recipient";
 
 const Header = () => {
   const basics = useArtboardStore((state) => state.resume.basics);
@@ -580,6 +581,7 @@ export const Chikorita = ({ columns, isFirstPage = false }: TemplateProps) => {
     <div className="grid min-h-[inherit] grid-cols-3">
       <div className="main p-custom group col-span-2 space-y-4">
         {isFirstPage && <Header />}
+        {isFirstPage && <Recipient />}
 
         {main.map((section) => (
           <Fragment key={section}>{mapSectionToComponent(section)}</Fragment>

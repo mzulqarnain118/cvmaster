@@ -16,7 +16,7 @@ import {
   Volunteer,
 } from "@reactive-resume/schema";
 import { Button, ScrollArea, Separator } from "@reactive-resume/ui";
-import { Fragment, useRef } from "react";
+import { Fragment, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Icon } from "@/client/components/icon";
@@ -41,6 +41,9 @@ export const LeftSidebar = () => {
     const section = containterRef.current?.querySelector(selector);
     section?.scrollIntoView({ behavior: "smooth" });
   };
+  useEffect(() => {
+    localStorage.setItem("type", type);
+  }, []);
 
   const renderSections = () => {
     if (type === "coverLetter") {
@@ -52,16 +55,16 @@ export const LeftSidebar = () => {
           <Separator />
           <SummarySection />
           <Separator />
-      {/* Custom Sections */}
-      {Object.values(customSections).map((section) => (
-          <Fragment key={section.id}>
-            <Separator />
+          {/* Custom Sections */}
+          {Object.values(customSections).map((section) => (
+            <Fragment key={section.id}>
+              <Separator />
 
-            <SectionBase<CustomSection>
-              id={`custom.${section.id}`}
-              title={(item) => item.name}
-              description={(item) => item.description}
-            />
+              <SectionBase<CustomSection>
+                id={`custom.${section.id}`}
+                title={(item) => item.name}
+                description={(item) => item.description}
+              />
             </Fragment>
           ))}
         </>
@@ -179,21 +182,13 @@ export const LeftSidebar = () => {
         <div className="flex flex-col items-center justify-center gap-y-2">
           {type === "coverLetter" ? (
             <>
-              <SectionIcon
-                id="basics"
-                name={`Basics`}
-                onClick={() => scrollIntoView("#basics")}
-              />
+              <SectionIcon id="basics" name={`Basics`} onClick={() => scrollIntoView("#basics")} />
               <SectionIcon
                 id="recipient"
                 name={`Recipient`}
                 onClick={() => scrollIntoView("#recipient")}
               />
-              <SectionIcon
-                id="summary"
-                onClick={() => scrollIntoView("#summary")}
-              />
-          
+              <SectionIcon id="summary" onClick={() => scrollIntoView("#summary")} />
             </>
           ) : (
             <>
@@ -206,58 +201,19 @@ export const LeftSidebar = () => {
                 })}
                 onClick={() => scrollIntoView("#basics")}
               />
-              <SectionIcon
-                id="summary"
-                onClick={() => scrollIntoView("#summary")}
-              />
-              <SectionIcon
-                id="profiles"
-                onClick={() => scrollIntoView("#profiles")}
-              />
-              <SectionIcon
-                id="experience"
-                onClick={() => scrollIntoView("#experience")}
-              />
-              <SectionIcon
-                id="education"
-                onClick={() => scrollIntoView("#education")}
-              />
-              <SectionIcon
-                id="skills"
-                onClick={() => scrollIntoView("#skills")}
-              />
-              <SectionIcon
-                id="languages"
-                onClick={() => scrollIntoView("#languages")}
-              />
-              <SectionIcon
-                id="awards"
-                onClick={() => scrollIntoView("#awards")}
-              />
-              <SectionIcon
-                id="certifications"
-                onClick={() => scrollIntoView("#certifications")}
-              />
-              <SectionIcon
-                id="interests"
-                onClick={() => scrollIntoView("#interests")}
-              />
-              <SectionIcon
-                id="projects"
-                onClick={() => scrollIntoView("#projects")}
-              />
-              <SectionIcon
-                id="publications"
-                onClick={() => scrollIntoView("#publications")}
-              />
-              <SectionIcon
-                id="volunteer"
-                onClick={() => scrollIntoView("#volunteer")}
-              />
-              <SectionIcon
-                id="references"
-                onClick={() => scrollIntoView("#references")}
-              />
+              <SectionIcon id="summary" onClick={() => scrollIntoView("#summary")} />
+              <SectionIcon id="profiles" onClick={() => scrollIntoView("#profiles")} />
+              <SectionIcon id="experience" onClick={() => scrollIntoView("#experience")} />
+              <SectionIcon id="education" onClick={() => scrollIntoView("#education")} />
+              <SectionIcon id="skills" onClick={() => scrollIntoView("#skills")} />
+              <SectionIcon id="languages" onClick={() => scrollIntoView("#languages")} />
+              <SectionIcon id="awards" onClick={() => scrollIntoView("#awards")} />
+              <SectionIcon id="certifications" onClick={() => scrollIntoView("#certifications")} />
+              <SectionIcon id="interests" onClick={() => scrollIntoView("#interests")} />
+              <SectionIcon id="projects" onClick={() => scrollIntoView("#projects")} />
+              <SectionIcon id="publications" onClick={() => scrollIntoView("#publications")} />
+              <SectionIcon id="volunteer" onClick={() => scrollIntoView("#volunteer")} />
+              <SectionIcon id="references" onClick={() => scrollIntoView("#references")} />
             </>
           )}
 
