@@ -139,6 +139,7 @@ services:
 volumes:
   minio_data:
   postgres_data:
+  pgadmin_data:
 
 networks:
   cv-network:
