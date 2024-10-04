@@ -21,6 +21,7 @@ import { TwoFactorGuard } from "../auth/guards/two-factor.guard";
 import { User } from "./decorators/user.decorator";
 import { UserService } from "./user.service";
 import { SubscriptionService } from "../subscription/subscription.service";
+export type PlanType = "resume" | "coverLetter" | "both";
 
 @ApiTags("User")
 @Controller("user")
@@ -41,6 +42,7 @@ export class UserController {
       user.isSubscriptionActive = resp.isSubscriptionActive;
       user.planName = resp.planName;
       user.subscriptionStatus = resp.subscriptionStatus;
+      user.planType = resp.planType as PlanType;
     }
 
     return usersList;
@@ -66,9 +68,11 @@ export class UserController {
         : false;
 
     const resp = await this.subscriptionService.userSubscriptionInfo(user);
+    console.log("🚀 ~ UserController ~ fetch ~ resp:", resp);
     user.isSubscriptionActive = resp.isSubscriptionActive;
     user.planName = resp.planName;
     user.subscriptionStatus = resp.subscriptionStatus;
+    user.planType = resp.planType as PlanType;
 
     return user;
   }

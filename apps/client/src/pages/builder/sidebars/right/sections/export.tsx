@@ -10,6 +10,7 @@ import { useResumeStore } from "@/client/stores/resume";
 import { getSectionIcon } from "../shared/section-icon";
 import { useUser } from "@/client/services/user";
 import { useDialog } from "@/client/stores/dialog";
+import { toast } from "@/client/hooks/use-toast";
 
 const onJsonExport = () => {
   const { resume } = useResumeStore.getState();
@@ -33,10 +34,19 @@ export const ExportSection = () => {
   const onPdfExport = async () => {
     const { resume } = useResumeStore.getState();
     if (user?.isSubscriptionActive) {
+      if (user?.planType !== "both" && resume?.type !== user?.planType) {
+        toast({
+          variant: "info",
+          title: t`Upgrade your subscription.`,
+          description: t`Your subscription does not include ${resume?.type}.Please upgrade your subsciption for unlocking this feature.`,
+        });
+        return;
+      }
+
       const { url } = await printResume({ id: resume.id });
       openInNewTab(url);
     } else {
-      open("create", { resumeId: resume.id });
+      open("create", { resumeId: resume?.id });
     }
   };
 

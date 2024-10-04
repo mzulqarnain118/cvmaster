@@ -14,7 +14,7 @@ export const createSubscription = async (payload: any) => {
 };
 
 export const useCreateSubscription = () => {
-  const resumeId = useResumeStore((state) => state.resume.id);
+  const { id, type } = useResumeStore((state) => state.resume);
 
   const {
     error,
@@ -26,12 +26,20 @@ export const useCreateSubscription = () => {
       const updatedUser = await fetchUser();
       useAuthStore.getState().setUser(updatedUser ?? null);
       queryClient.setQueryData(["user"], updatedUser);
+      if (updatedUser?.planType !== "both" && type !== updatedUser?.planType) {
+        toast({
+          variant: "info",
+          title: `Upgrade your subscription.`,
+          description: `Your subscription does not include ${type}.Please upgrade your subsciption for unlocking this feature.`,
+        });
+        return;
+      }
       toast({
         variant: "success",
         title: `Subscription Activated`,
         description: `Thanks for the payment. Your resume has been downloaded in PDF format successfully.`,
       });
-      const { url } = await printResume({ id: resumeId });
+      const { url } = await printResume({ id });
 
       openInNewTab(url);
       return data;

@@ -14,6 +14,7 @@ import { findResumeByUsernameSlug, usePrintResume } from "@/client/services/resu
 import { useUser } from "@/client/services/user";
 import { useDialog } from "@/client/stores/dialog";
 import { useResumeStore } from "@/client/stores/resume";
+import { toast } from "@/client/hooks/use-toast";
 
 const openInNewTab = (url: string) => {
   const win = window.open(url, "_blank");
@@ -23,7 +24,7 @@ const openInNewTab = (url: string) => {
 export const PublicResumePage = () => {
   const { user } = useUser();
   const { open } = useDialog("subscription");
-  const resumeId = useResumeStore((state) => state.resume.id);
+  const { id: resumeId, type } = useResumeStore((state) => state.resume);
 
   const frameRef = useRef<HTMLIFrameElement>(null);
 
@@ -69,6 +70,15 @@ export const PublicResumePage = () => {
 
   const onDownloadPdf = async () => {
     if (user?.isSubscriptionActive) {
+      if (user?.planType !== "both" && type !== user?.planType) {
+        toast({
+          variant: "info",
+          title: t`Upgrade your subscription.`,
+          description: t`Your subscription does not include ${type}.Please upgrade your subsciption for unlocking this feature.`,
+        });
+        return;
+      }
+
       const { url } = await printResume({ id });
       openInNewTab(url);
     } else {

@@ -41,6 +41,7 @@ import { getCookieOptions } from "./utils/cookie";
 import { payloadSchema } from "./utils/payload";
 import { SubscriptionService } from "../subscription/subscription.service";
 import { UserService } from "../user/user.service";
+import { PlanType } from "../user/user.controller";
 
 @ApiTags("Authentication")
 @Controller("auth")
@@ -125,6 +126,7 @@ export class AuthController {
     const resp = await this.subscriptionService.userSubscriptionInfo(user);
     user.isSubscriptionActive = resp.isSubscriptionActive;
     user.planName = resp.planName;
+    user.planType = resp.planType as PlanType;
     user.subscriptionStatus = resp.subscriptionStatus;
 
     return this.handleAuthenticationResponse(user, response);

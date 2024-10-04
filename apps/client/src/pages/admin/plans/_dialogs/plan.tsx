@@ -77,6 +77,7 @@ export const PlanDialog = () => {
       duration: "month",
       days: 1,
       trialPeriod: 0,
+      planType: "both",
     },
   });
 
@@ -101,6 +102,7 @@ export const PlanDialog = () => {
         duration: values.duration,
         days: values.days,
         trialPeriod: values.trialPeriod,
+        planType: values.planType,
       });
     }
 
@@ -116,6 +118,7 @@ export const PlanDialog = () => {
         duration: values.duration,
         days: values.days,
         trialPeriod: values.trialPeriod,
+        planType: values.planType,
       });
     }
 
@@ -133,6 +136,7 @@ export const PlanDialog = () => {
         duration: "month",
         days: 1,
         trialPeriod: 0,
+        planType: "both",
       });
       setShowDays(false);
     }
@@ -148,6 +152,7 @@ export const PlanDialog = () => {
         duration: payload.item?.duration,
         days: payload.item?.days ? parseInt(payload.item?.days) : 1,
         trialPeriod: payload.item?.trialPeriod ? parseInt(payload.item?.trialPeriod) : 0,
+        planType: payload.item?.planType,
       });
       setShowDays(payload.item?.duration == "days");
     }
@@ -347,7 +352,35 @@ export const PlanDialog = () => {
                 </FormItem>
               )}
             /> */}
-
+            <FormField
+              name="planType"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Plan Type</FormLabel>
+                  <FormControl>
+                    <div className="flex items-center justify-between gap-x-2">
+                      <Select
+                        value={field.value}
+                        onValueChange={(value: "resume" | "coverLetter" | "both") =>
+                          form.setValue("planType", value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t`Select Plan Type`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="resume">Resume</SelectItem>
+                          <SelectItem value="coverLetter">Cover Letter</SelectItem>
+                          <SelectItem value="both">Both</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name="status"
               control={form.control}

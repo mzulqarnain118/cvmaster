@@ -26,6 +26,7 @@ export const userSchema = z.object({
   subscriptionId: z.string().default(""),
   planId: z.string().default(""),
   planName: z.string().default(""),
+  planType: z.enum(["resume", "coverLetter", "both"]).default("both"),
   subscriptionStatus: z.string().default(""),
   trialAvailed: z.boolean().default(false),
   paymentUserId: z.string().default(""),

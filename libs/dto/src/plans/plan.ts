@@ -12,6 +12,7 @@ export const planSchema = z.object({
   duration: z.enum(["month", "quarterly", "sixMonths", "year", "days"]).default("month"),
   days: z.number().default(0),
   trialPeriod: z.number().default(0),
+  planType: z.enum(["resume", "coverLetter", "both"]).default("both"),
   priceId: z.string(),
   deleted: z.boolean().default(false),
   createdAt: z.date().or(z.dateString()),

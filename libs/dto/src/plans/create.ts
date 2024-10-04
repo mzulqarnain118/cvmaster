@@ -10,6 +10,7 @@ export const createPlanSchema = z.object({
   duration: z.enum(["month", "quarterly", "sixMonths", "year", "days"]).default("month"),
   days: z.number().min(1).default(1),
   trialPeriod: z.number().default(0),
+  planType: z.enum(["resume", "coverLetter", "both"]).default("both"),
 });
 
 export class CreatePlanDto extends createZodDto(createPlanSchema) {}

@@ -36,7 +36,7 @@ export const BuilderToolbar = () => {
   const redo = useTemporalResumeStore((state) => state.redo);
   const frameRef = useBuilderStore((state) => state.frame.ref);
 
-  const id = useResumeStore((state) => state.resume.id);
+  const { id, type } = useResumeStore((state) => state.resume);
   const isPublic = useResumeStore((state) => state.resume.visibility === "public");
   const pageOptions = useResumeStore((state) => state.resume.data.metadata.page.options);
 
@@ -44,6 +44,15 @@ export const BuilderToolbar = () => {
 
   const onPrint = async () => {
     if (user?.isSubscriptionActive) {
+      if (user?.planType !== "both" && type !== user?.planType) {
+        toast({
+          variant: "info",
+          title: t`Upgrade your subscription.`,
+          description: t`Your subscription does not include ${type}.Please upgrade your subsciption for unlocking this feature.`,
+        });
+        return;
+      }
+
       const { url } = await printResume({ id });
       openInNewTab(url);
     } else {

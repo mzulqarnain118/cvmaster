@@ -9,6 +9,11 @@ import { Star, StarHalf } from "@phosphor-icons/react";
 import { useUser } from "@/client/services/user";
 import { PlanDto } from "@reactive-resume/dto";
 
+const features = {
+  both: ["Resume", "Cover Letter"],
+  resume: ["Resume"],
+  coverLetter: ["Cover Letter"],
+};
 const BaseCard = ({
   children,
   className,
@@ -62,13 +67,16 @@ export const PlanCards = ({
   const data = plans?.filter((item) => item.status == true);
 
   return (
-    <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2">
       {loading &&
         Array.from({ length: 2 }).map((_, i) => (
           <div
             key={i}
             className="duration-300 animate-in fade-in"
-            style={{ animationFillMode: "backwards", animationDelay: `${i * 300}ms` }}
+            style={{
+              animationFillMode: "backwards",
+              animationDelay: `${i * 200}ms`,
+            }}
           >
             <BaseCard />
           </div>
@@ -81,21 +89,30 @@ export const PlanCards = ({
               key={index}
               layout
               initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: (index + 2) * 0.1 } }}
-              exit={{ opacity: 0, filter: "blur(8px)", transition: { duration: 0.5 } }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                transition: { delay: (index + 1) * 0.1 },
+              }}
+              exit={{
+                opacity: 0,
+                filter: "blur(10px)",
+                transition: { duration: 0.6 },
+              }}
+              className="transform hover:scale-105 transition-transform duration-300"
             >
               <ContextMenu>
                 <ContextMenuTrigger>
                   <BaseCard
-                    className="space-y-0"
+                    className="space-y-0 shadow-lg rounded-lg border border-gray-200 hover:shadow-2xl transition-shadow"
                     isPopular={index === 1}
                     trialDays={user?.trialAvailed ? 0 : plan.trialPeriod}
                   >
-                    <div className="p-6 text-center">
-                      <h3 className="text-2xl font-bold mb-2">{plan.name || ""}</h3>
-                      <p className="text-3xl font-extrabold mb-4">
+                    <div className="p-6 text-center flex flex-col justify-between">
+                      <h3 className="text-2xl font-bold text-white mb-3">{plan.name || ""}</h3>
+                      <p className="text-3xl font-extrabold text-white mb-4">
                         ${plan.price ?? 0}
-                        <span className="text-sm font-normal">
+                        <span className="text-sm font-medium text-white ml-1">
                           /
                           {plan.duration == "month"
                             ? "Monthly"
@@ -110,22 +127,16 @@ export const PlanCards = ({
                                     : plan.duration}
                         </span>
                       </p>
-                      <ul className="text-sm mb-6">
-                        <li className="flex items-center justify-center mb-2">
-                          <Star weight="fill" className="text-yellow-400 mr-2" />
-                          Feature 1
-                        </li>
-                        <li className="flex items-center justify-center mb-2">
-                          <Star weight="fill" className="text-yellow-400 mr-2" />
-                          Feature 2
-                        </li>
-                        <li className="flex items-center justify-center">
-                          <StarHalf weight="fill" className="text-yellow-400 mr-2" />
-                          Feature 3
-                        </li>
+                      <ul className="text-sm mb-6 flex flex-col items-start">
+                        {features?.[plan?.planType]?.map((feat, idx) => (
+                          <li key={idx} className="flex items-center mb-2">
+                            <Star weight="fill" className="text-yellow-400 mr-2" />
+                            {feat} Download
+                          </li>
+                        ))}
                       </ul>
                       <Button
-                        className="w-full"
+                        className="w-full bg-white text-black transition-colors duration-200"
                         variant="primary"
                         disabled={subscriptionLoading || printLoading}
                         onClick={() => onClick(plan)}

@@ -117,4 +117,5 @@ model Plans {
   deleted     Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  planType    String   @default("both")
 }

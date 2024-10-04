@@ -54,6 +54,7 @@ export class SubscriptionService {
         duration: createPlanDto.duration,
         days: createPlanDto.duration == "days" ? createPlanDto.days : 1,
         trialPeriod: createPlanDto.trialPeriod,
+        planType: createPlanDto.planType,
         priceId: price.id,
       },
     });
@@ -99,6 +100,7 @@ export class SubscriptionService {
           duration: updatePlanDto.duration,
           days: updatePlanDto.days,
           trialPeriod: updatePlanDto.trialPeriod,
+          planType: updatePlanDto.planType,
           description: updatePlanDto.description,
           status: updatePlanDto.status,
           priceId: stripePrice.id,
@@ -250,6 +252,7 @@ export class SubscriptionService {
       isSubscriptionActive: false,
       planName: "",
       subscriptionStatus: "In-active",
+      planType: "both",
     };
 
     if (user.subscriptionId) {
@@ -261,6 +264,7 @@ export class SubscriptionService {
     if (user.planId) {
       const plan = await this.prisma.plans.findUniqueOrThrow({ where: { id: user.planId } });
       response.planName = plan.name;
+      response.planType = plan.planType;
     }
 
     return response;
