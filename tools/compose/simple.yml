@@ -22,6 +22,26 @@ services:
       retries: 5
     networks:
       - cv-network
+    ports:
+      - "5432:5432"
+
+  # # pgAdmin
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: unless-stopped
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+  #     PGADMIN_DEFAULT_PASSWORD: admin@password
+  #     PGADMIN_CONFIG_MAX_SIZE_BYTES: 1073741824  # 1GB in bytes
+  #     PGADMIN_CONFIG_SERVER_MODE: "False"
+  #   volumes:
+  #     - pgadmin_data:/var/lib/pgadmin
+  #   ports:
+  #     - "5050:80"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - cv-network
 
   # Storage (for image uploads)
   minio:
@@ -119,6 +139,7 @@ services:
 volumes:
   minio_data:
   postgres_data:
+  #pgadmin_data:
 
 networks:
   cv-network:
