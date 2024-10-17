@@ -51,7 +51,7 @@ export const RegisterPage = () => {
     try {
       await register(data);
 
-      navigate("/auth/verify-email");
+      navigate("/dashboard/resumes", { replace: true });
     } catch {
       form.reset();
     }

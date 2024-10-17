@@ -1,5 +1,5 @@
 import { t } from "@lingui/macro";
-import { FadersHorizontal, ReadCvLogo } from "@phosphor-icons/react";
+import { FadersHorizontal, ReadCvLogo, SignOut } from "@phosphor-icons/react";
 import { Button, KeyboardShortcut, Separator } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
 import { motion } from "framer-motion";
@@ -11,6 +11,7 @@ import { Icon } from "@/client/components/icon";
 import { UserAvatar } from "@/client/components/user-avatar";
 import { UserOptions } from "@/client/components/user-options";
 import { useUser } from "@/client/services/user";
+import { useLogout } from "@/client/services/auth";
 
 type Props = {
   className?: string;
@@ -32,6 +33,7 @@ type SidebarItem = {
   name: string;
   shortcut?: string;
   icon: React.ReactNode;
+  onClick?: () => void;
 };
 
 type SidebarItemProps = SidebarItem & {
@@ -69,6 +71,7 @@ type SidebarProps = {
 export const Sidebar = ({ setOpen }: SidebarProps) => {
   const { user } = useUser();
   const navigate = useNavigate();
+  const { logout } = useLogout();
 
   useKeyboardShortcut(["shift", "r"], () => {
     navigate("/dashboard/resumes");
@@ -104,6 +107,13 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
       shortcut: "⇧S",
       icon: <FadersHorizontal />,
     },
+    {
+      path: "",
+      name: t`Logout`,
+      shortcut: "⇧L",
+      icon: <SignOut />,
+      onClick: () => logout(),
+    },
   ];
 
   return (
@@ -120,7 +130,14 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
 
       <div className="grid gap-y-2">
         {sidebarItems.map((item) => (
-          <SidebarItem {...item} key={item.path} onClick={() => setOpen?.(false)} />
+          <SidebarItem
+            {...item}
+            key={item.path}
+            onClick={() => {
+              item?.onClick?.();
+              setOpen?.(false);
+            }}
+          />
         ))}
       </div>
 
