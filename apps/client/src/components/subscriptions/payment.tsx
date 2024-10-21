@@ -67,8 +67,11 @@ const CheckoutForm = ({
 
   useEffect(() => {
     handleApplePay();
-    hideStripeElement();
   }, [stripe]);
+
+  useEffect(() => {
+    hideStripeElement();
+  }, [stripe, document.querySelectorAll(".ElementsApp")]);
 
   const hideStripeElement = () => {
     const elements = document.querySelectorAll(".ElementsApp");
