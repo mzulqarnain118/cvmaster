@@ -7,11 +7,19 @@ import { colors } from "@/client/constants/colors";
 import { useResumeStore } from "@/client/stores/resume";
 
 import { getSectionIcon } from "../shared/section-icon";
+import { useEffect } from "react";
 
 export const ThemeSection = () => {
   const setValue = useResumeStore((state) => state.setValue);
   const theme = useResumeStore((state) => state.resume.data.metadata.theme);
 
+  useEffect(() => {
+    setValue("metadata.theme", {
+      primary: colors[0],
+      background: "#ffffff",
+      text: "#000000",
+    });
+  }, []);
   return (
     <section id="theme" className="grid gap-y-6">
       <header className="flex items-center justify-between">
@@ -53,6 +61,7 @@ export const ThemeSection = () => {
                 <HexColorPicker
                   color={theme.primary}
                   onChange={(color) => {
+                    console.log("🚀 ~ ThemeSection ~ color:", color);
                     setValue("metadata.theme.primary", color);
                   }}
                 />

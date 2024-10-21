@@ -73,7 +73,7 @@ const CheckoutForm = ({
   const hideStripeElement = () => {
     const elements = document.querySelectorAll(".ElementsApp");
     elements.forEach((element) => {
-      element.classList.add("hidden");
+      element.classList.add("hide-stripe-element");
     });
   };
   const handleSubmit = async (e: any) => {
