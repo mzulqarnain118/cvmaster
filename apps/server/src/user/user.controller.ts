@@ -68,7 +68,6 @@ export class UserController {
         : false;
 
     const resp = await this.subscriptionService.userSubscriptionInfo(user);
-    console.log("🚀 ~ UserController ~ fetch ~ resp:", resp);
     user.isSubscriptionActive = resp.isSubscriptionActive;
     user.planName = resp.planName;
     user.subscriptionStatus = resp.subscriptionStatus;

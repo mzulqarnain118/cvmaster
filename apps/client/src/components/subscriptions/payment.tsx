@@ -71,7 +71,7 @@ const CheckoutForm = ({
   }, [stripe]);
 
   const hideStripeElement = () => {
-    const elements = document.querySelectorAll(".StripeElement");
+    const elements = document.querySelectorAll(".ElementsApp");
     elements.forEach((element) => {
       element.classList.add("hidden");
     });
