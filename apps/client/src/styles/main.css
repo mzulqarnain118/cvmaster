@@ -14,5 +14,9 @@
 }
 
 #primary {
-  display: none;
+  display: none !important;
+}
+
+.ElementsApp .LinkButton-inner {
+  display: none !important;
 }
