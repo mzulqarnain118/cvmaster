@@ -67,8 +67,15 @@ const CheckoutForm = ({
 
   useEffect(() => {
     handleApplePay();
+    hideStripeElement();
   }, [stripe]);
 
+  const hideStripeElement = () => {
+    const elements = document.querySelectorAll(".StripeElement");
+    elements.forEach((element) => {
+      element.classList.add("hidden");
+    });
+  };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!stripe || !elements) return;

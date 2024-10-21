@@ -10,7 +10,6 @@
 .StripeElement {
   background-color: white;
   padding: 15px 5px;
-  height: 0rem;
 }
 
 #primary {
@@ -18,5 +17,9 @@
 }
 
 .ElementsApp .LinkButton-inner {
+  display: none !important;
+}
+
+.hidden {
   display: none !important;
 }
