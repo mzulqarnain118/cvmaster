@@ -1,0 +1,162 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-container
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cv_network
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-container
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_MAX_SIZE_BYTES: 1073741824  # 1GB in bytes
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - cv_network
+
+  minio:
+    image: minio/minio
+    container_name: minio-container
+    restart: unless-stopped
+    command: server /data 
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ADDRESS: :9000
+      MINIO_CONSOLE_ADDRESS: :9001
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    networks:
+      - cv_network
+
+  chrome:
+    image: ghcr.io/browserless/chromium:latest
+    container_name: chrome-container
+    restart: unless-stopped
+    environment:
+      TIMEOUT: 10000
+      CONCURRENT: 10
+      TOKEN: ${CHROME_TOKEN}
+      EXIT_ON_HEALTH_FAILURE: true
+      PRE_REQUEST_HEALTH_CHECK: true
+    networks:
+      - cv_network
+
+  app:
+    image: registry-gitlab.softech.co.uk/cv_master/cv_backend:v23
+    container_name: app-container
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - minio
+      - chrome
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      PUBLIC_URL: https://app.cvmaster.co
+      STORAGE_URL: https://minio.cvmaster.co/default
+
+      CHROME_TOKEN: ${CHROME_TOKEN}
+      CHROME_URL: ws://chrome:3000
+
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+
+      ACCESS_TOKEN_SECRET: ${ACCESS_TOKEN_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
+
+      MAIL_FROM: ${MAIL_FROM}
+
+      STORAGE_ENDPOINT: minio
+      STORAGE_PORT: 9000
+      STORAGE_REGION: us-east-1
+      STORAGE_BUCKET: default
+      STORAGE_ACCESS_KEY: ${MINIO_ROOT_USER}
+      STORAGE_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      STORAGE_USE_SSL: false
+      STORAGE_SKIP_BUCKET_CHECK: false
+    networks:
+      - cv_network
+
+  db:
+    image: mysql:8
+    container_name: mysql-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --log-bin-trust-function-creators=true
+    networks:
+      - cv_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    restart: unless-stopped
+    environment:
+      PMA_HOST: ${PMA_HOST}
+      PMA_PORT: ${PMA_PORT}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      UPLOAD_LIMIT: ${UPLOAD_LIMIT}
+      post_max_size: ${POST_MAX_SIZE}
+      upload_max_filesize: ${UPLOAD_MAX_FILESIZE}
+      max_execution_time: ${MAX_EXECUTION_TIME}
+      max_input_time: ${MAX_INPUT_TIME}
+      memory_limit: ${MEMORY_LIMIT}
+    ports:
+      - "8080:80"
+    networks:
+      - cv_network
+
+volumes:
+  mysql_data:
+    name: mysql_data_volume
+  minio_data:
+    name: minio_data_volume
+  postgres_data:
+    name: postgres_data_volume
+  pgadmin_data:
+    name: pgadmin_data_volume
+
+networks:
+  cv_network:
+    name: cv_network
+    driver: bridge
