@@ -99,7 +99,7 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
     <div className="flex h-full flex-col gap-y-4">
       <div className="ml-12 flex justify-center lg:ml-0">
         <Button asChild size="icon" variant="ghost" className="size-18 p-0">
-          <Link to="https://cv.edxconnect.com">
+          <Link to="https://app.cvmaster.co/">
             <Icon size={94} className="mx-auto hidden lg:block" />
           </Link>
         </Button>

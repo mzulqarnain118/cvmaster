@@ -30,7 +30,8 @@ import { AdminLayout } from "../pages/admin/layout";
 export const routes = createRoutesFromElements(
   <Route element={<Providers />}>
     <Route element={<HomeLayout />}>
-      <Route path="/" element={<HomePage />} />
+      {/* <Route path="/" element={<HomePage />} /> */}
+      <Route path="/" element={<Navigate replace to="/auth/login" />} />
 
       <Route path="meta">
         <Route path="privacy-policy" element={<PrivacyPolicyPage />} />

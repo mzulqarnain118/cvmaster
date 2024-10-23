@@ -70,15 +70,31 @@ const CheckoutForm = ({
   }, [stripe]);
 
   useEffect(() => {
-    hideStripeElement();
-  }, [stripe, document.querySelectorAll(".ElementsApp")]);
+    const observer = new MutationObserver(() => {
+      const stripeElement = document.getElementById("primary");
+      const elements = document.querySelectorAll(".ElementsApp");
 
-  const hideStripeElement = () => {
-    const elements = document.querySelectorAll(".ElementsApp");
-    elements.forEach((element) => {
-      element.classList.add("hide-stripe-element");
+      if (stripeElement) {
+        stripeElement.style.display = "none"; // Hide the 'Pay with Link' button
+      }
+
+      if (elements.length > 0) {
+        elements.forEach((element) => {
+          element.classList.add("hide-stripe-element");
+        });
+      }
     });
-  };
+
+    // Observe the body or a specific container for changes in the child list
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, [stripe]);
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!stripe || !elements) return;
