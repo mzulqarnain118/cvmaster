@@ -20,7 +20,7 @@ import { useResumeStore } from "@/client/stores/resume";
 
 export const RightSidebar = () => {
   const containterRef = useRef<HTMLDivElement | null>(null);
-  const {type} = useResumeStore((state) => state.resume);
+  const { type } = useResumeStore((state) => state.resume);
 
   const scrollIntoView = (selector: string) => {
     const section = containterRef.current?.querySelector(selector);
@@ -33,14 +33,22 @@ export const RightSidebar = () => {
         <div ref={containterRef} className="grid gap-y-6 p-6 @container/right">
           <TemplateSection />
           <Separator />
-          {type === 'coverLetter' ?null: <><LayoutSection />   <Separator /></>}
-        
+          {type === "coverLetter" ? null : (
+            <>
+              <LayoutSection /> <Separator />
+            </>
+          )}
+
           <TypographySection />
           <Separator />
           <ThemeSection />
           <Separator />
-          {type === 'coverLetter' ?null: <><PageSection />
-          <Separator /></>}
+          {type === "coverLetter" ? null : (
+            <>
+              <PageSection />
+              <Separator />
+            </>
+          )}
           {/* <SharingSection /> */}
           {/* <Separator />
           <StatisticsSection />

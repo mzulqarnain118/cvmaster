@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   postgres:
@@ -43,7 +43,7 @@ services:
     image: minio/minio
     container_name: minio-container
     restart: unless-stopped
-    command: server /data 
+    command: server /data
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -98,6 +98,7 @@ services:
       STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
 
       MAIL_FROM: ${MAIL_FROM}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD}
 
       STORAGE_ENDPOINT: minio
       STORAGE_PORT: 9000

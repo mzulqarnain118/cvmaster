@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 import webfontloader from "webfontloader";
 
@@ -6,6 +6,7 @@ import { useArtboardStore } from "../store/artboard";
 
 export const ArtboardPage = () => {
   const metadata = useArtboardStore((state) => state.resume.metadata);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const fontString = useMemo(() => {
     const family = metadata.typography.font.family;
@@ -23,6 +24,7 @@ export const ArtboardPage = () => {
         const height = window.document.body.offsetHeight;
         const message = { type: "PAGE_LOADED", payload: { width, height } };
         window.postMessage(message, "*");
+        setIsLoaded(true); // Set the state to true when fonts are loaded
       },
     });
   }, [fontString]);
@@ -55,5 +57,18 @@ export const ArtboardPage = () => {
     }
   }, [metadata]);
 
-  return <Outlet />;
+  // Force re-render on mobile devices
+  useEffect(() => {
+    if (isLoaded) {
+      const handleResize = () => {
+        setIsLoaded(false);
+        setTimeout(() => setIsLoaded(true), 0);
+      };
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, [isLoaded]);
+
+  return isLoaded ? <Outlet /> : null;
 };

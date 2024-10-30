@@ -15,10 +15,11 @@ export const ThemeSection = () => {
 
   useEffect(() => {
     setValue("metadata.theme", {
-      primary: colors[0],
+      primary: colors[8],
       background: "#ffffff",
       text: "#000000",
     });
+    setValue("metadata.template", "chikorita");
   }, []);
   return (
     <section id="theme" className="grid gap-y-6">

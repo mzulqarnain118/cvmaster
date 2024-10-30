@@ -3,6 +3,7 @@ import { HouseSimple, Lock, SidebarSimple } from "@phosphor-icons/react";
 import { Button, Tooltip } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 import { useBuilderStore } from "@/client/stores/builder";
 import { useResumeStore } from "@/client/stores/resume";
@@ -21,7 +22,14 @@ export const BuilderHeader = () => {
   const onToggle = (side: "left" | "right") => {
     toggle(side);
   };
-
+  useEffect(() => {
+    // Open the right panel
+    onToggle("right");
+    // Close the right panel instantly
+    setTimeout(() => {
+      onToggle("right");
+    }, 0);
+  }, []);
   return (
     <div
       style={{ left: `${leftPanelSize}%`, right: `${rightPanelSize}%` }}

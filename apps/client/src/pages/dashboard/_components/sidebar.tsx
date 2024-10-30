@@ -41,7 +41,6 @@ type SidebarItemProps = SidebarItem & {
 };
 
 const SidebarItem = ({ path, name, shortcut, icon, onClick }: SidebarItemProps) => {
-  console.log("🚀 ~ SidebarItem ~ name:", name);
   const isActive = useLocation().pathname === path;
 
   return (
@@ -53,7 +52,7 @@ const SidebarItem = ({ path, name, shortcut, icon, onClick }: SidebarItemProps) 
         "h-auto justify-start px-4 py-3",
         isActive && "pointer-events-none bg-secondary/50 text-secondary-foreground",
       )}
-      // onClick={onClick}
+      onClick={onClick}
     >
       <Link to={path}>
         <div className="mr-3">{icon}</div>
